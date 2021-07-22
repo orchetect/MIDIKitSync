@@ -13,6 +13,7 @@
 <a href="https://github.com/orchetect/MIDIKitSync/blob/main/LICENSE">
 <img src="http://img.shields.io/badge/license-MIT-green.svg?style=flat"
      alt="License: MIT" /></a>
+
 This extension adds abstractions for MIDI sync protocols, such as MTC (MIDI Timecode).
 
 ## Getting Started
