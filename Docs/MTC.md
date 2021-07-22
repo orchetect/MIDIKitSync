@@ -185,7 +185,7 @@ let mtcRec = MIDI.MTC.Receiver(name: "main",
         // update incoming timecode display somewhere in your app
         print(timecode.stringValue)
     }
-	
+
 } stateChanged: { state in
     // called when the sync state has changed
     switch state {

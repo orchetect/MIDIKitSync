@@ -63,7 +63,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             backing: .buffered, defer: false
         )
         mtcGenWindow.isReleasedWhenClosed = false
-        //		mtcGenWindow.setFrameAutosaveName("MTC Generator")
+        //mtcGenWindow.setFrameAutosaveName("MTC Generator")
         mtcGenWindow.title = "MTC Generator"
         mtcGenWindow.contentView = NSHostingView(rootView: contentView)
         mtcGenWindow.makeKeyAndOrderFront(nil)
@@ -90,7 +90,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             backing: .buffered, defer: false
         )
         mtcRecWindow.isReleasedWhenClosed = false
-        //		mtcRecWindow.setFrameAutosaveName("MTC Receiver")
+        //mtcRecWindow.setFrameAutosaveName("MTC Receiver")
         mtcRecWindow.title = "MTC Receiver"
         mtcRecWindow.contentView = NSHostingView(rootView: contentView)
         mtcRecWindow.makeKeyAndOrderFront(nil)

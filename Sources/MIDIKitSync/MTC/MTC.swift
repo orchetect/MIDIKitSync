@@ -20,10 +20,10 @@
 // It is important to note that not all DAWs implement all features of MTC. For example, Pro Tools can generate or slave to MTC quarter frames, but does not transmit or receive full-frame messages - meaning Pro Tools will not locate to new timecodes when the MTC stream is not running. However, some other DAWs will.
 
 extension MIDI {
-	
-	/// Objects and methods relating to the MIDI Timecode (MTC) extension on the MIDI 1.0 standard spec
-	public enum MTC {
-		
-	}
-	
+    
+    /// Objects and methods relating to the MIDI Timecode (MTC) extension on the MIDI 1.0 standard spec
+    public enum MTC {
+        
+    }
+    
 }
