@@ -8,7 +8,6 @@
 import XCTest
 @testable import MIDIKitSync
 @testable import TimecodeKit
-import OTCoreTestingXCTest
 
 import TimecodeKit
 

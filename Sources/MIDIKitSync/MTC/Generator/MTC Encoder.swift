@@ -3,7 +3,6 @@
 //  MIDIKitSync • https://github.com/orchetect/MIDIKitSync
 //
 
-@_implementationOnly import OTCore
 import TimecodeKit
 
 extension MIDI.MTC {

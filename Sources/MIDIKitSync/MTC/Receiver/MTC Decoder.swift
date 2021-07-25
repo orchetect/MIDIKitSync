@@ -6,7 +6,7 @@
 /* Notes:
  
  Pro Tools
- 
+ ---------
  - Pro Tools (as of v2018.4) does not send any full frame messages.
  - Essentially, it does not send any location or relocation messages of any kind over MTC.
  - When normal playback begins (forwards in time, at 1:1 speed), PT starts transmitting quarter-frames. When playback stops, it simply stops transmitting quarter-frames. It does not complete a full frame before stopping MTC transmission, it will stop at the last quarter-frame
@@ -14,18 +14,17 @@
  - Pro Tools is capable of forwards and backwards scrubbing at various speeds, but does not transmit any MTC data while doing those operations.
  
  Cubase
- 
+ ------
  - Cubase Pro sends full frame messages.
  
  Logic Pro
- 
+ ---------
  - Logic Pro X (as of 10.4.1) does not send any full frame messages.
  
  */
 
-@_implementationOnly import OTCore
-@_implementationOnly import SwiftRadix
 import TimecodeKit
+@_implementationOnly import SwiftRadix
 
 extension MIDI.MTC {
     
@@ -169,309 +168,328 @@ extension MIDI.MTC.Decoder: ReceivesMIDIEvents {
     // MARK: - ReceivesMIDIEvents
     
     /// Incoming MIDI messages
-    @inline(__always) public func midiIn(event: MIDI.Event) {
+    @inline(__always)
+    public func midiIn(event: MIDI.Event) {
         
-        let data = event.rawBytes
+        switch event {
+        case .sysExUniversal(universalType: let universalType,
+                             deviceID: let deviceID,
+                             subID1: let subID1,
+                             subID2: let subID2,
+                             data: let data):
+            processSysEx(universalType: universalType,
+                         deviceID: deviceID,
+                         subID1: subID1,
+                         subID2: subID2,
+                         data: data)
+            
+        case .timecodeQuarterFrame(byte: let dataByte):
+            processQF(dataByte: dataByte)
+            
+        default:
+            break
+        }
         
-        // MTC Full Timecode message
-        // (1-frame resolution, does not carry subframe information)
-        // ---------------------
-        // F0 7F 7F 01 01 hh mm ss ff F7
-        if data.count == 10 &&
-            data[0] == 0xF0 &&
-            data[1] == 0x7F &&
-            data[2] == 0x7F &&
-            data[3] == 0x01 &&
-            data[4] == 0x01 &&
-            data[9] == 0xF7 {
+    }
+    
+    /// MTC Full Timecode message
+    /// (1-frame resolution, does not carry subframe information)
+    /// ---------------------
+    /// F0 7F 7F 01 01 hh mm ss ff F7
+    ///
+    /// hour byte includes base framerate info
+    /// 0rrhhhhh: Rate (0–3) and hour (0–23).
+    /// rr == 00: 24 frames/s
+    /// rr == 01: 25 frames/s
+    /// rr == 10: 29.97d frames/s (SMPTE drop-frame timecode)
+    /// rr == 11: 30 frames/s
+    @inline(__always)
+    internal func processSysEx(universalType: MIDI.Event.SysEx.UniversalType,
+                               deviceID: MIDI.UInt7,
+                               subID1: MIDI.UInt7,
+                               subID2: MIDI.UInt7,
+                               data: [MIDI.Byte]) {
+        
+        guard universalType == .realTime, // 0x7F
+              deviceID      == 0x7F,
+              subID1        == 0x01,
+              subID2        == 0x01,
+              data.count    == 4
+        else { return }
+        
+        // fps component
+        setMTCFrameRate(rateBits: (data[0] & 0b01100000) >> 5)
+        
+        // timecode components
+        rawHours = Int(data[0] & 0b00011111) // mask to retrieve the last 5 bits (hour number component)
+        rawMinutes = Int(data[1]) // literal integer
+        rawSeconds = Int(data[2]) // literal integer
+        rawFrames = Int(data[3]) // literal integer
+        
+        var tcc = TCC(h: rawHours,
+                      m: rawMinutes,
+                      s: rawSeconds,
+                      f: rawFrames)
+        
+        // set up a variable to store the actual output frame rate
+        let outputFrameRate: Timecode.FrameRate
+        
+        // scale frames if local frame rate is set
+        // scaling will return nil if frame rates are not compatible
+        if let localFrameRate = localFrameRate,
+           let scaledFramesDouble = mtcFrameRate.scaledFrames(
+            fromRawMTCFrames: tcc.f,
+            quarterFrames: 0,
+            to: localFrameRate)
+        {
+            let scaledFrameInt = Int(scaledFramesDouble)
+            tcc.f = scaledFrameInt
             
-            // hour byte includes base framerate info
-            // 0rrhhhhh: Rate (0–3) and hour (0–23).
-            // rr == 00: 24 frames/s
-            // rr == 01: 25 frames/s
-            // rr == 10: 29.97d frames/s (SMPTE drop-frame timecode)
-            // rr == 11: 30 frames/s
+            // since scaling succeeded, we know we are outputting the localFrameRate
+            outputFrameRate = localFrameRate
+        } else {
+            outputFrameRate = mtcFrameRate.directEquivalentFrameRate
+        }
+        
+        let tc = tcc.toTimecode(rawValuesAt: outputFrameRate)
+        
+        // update raw timecode values property
+        timecode = tc
+        
+        let displayNeedsUpdate = lastTimecodeSentToHandler != tcc
+        
+        lastTimecodeSentToHandler = tcc
+        
+        // notify handler that timecode has changed
+        timecodeChangedHandler?(tc,
+                                .fullFrame,
+                                direction,
+                                displayNeedsUpdate)
+        
+    }
+    
+    /// Quarter-frame messages
+    /// ----------------------
+    /// Since it takes eight quarter-frames for a complete time code message, the complete SMPTE time is updated every two frames.
+    /// A quarter-frame message consists of a status byte of 0xF1, followed by a single 7-bit data value: 3 bits to identify the piece, and 4 bits of partial time code.
+    @inline(__always)
+    internal func processQF(dataByte: MIDI.Byte) {
+        
+        // Verbose debugging - careful when enabling this!
+        // -----------------------------------------------
+        // print("F1",
+        //
+        // data[1]
+        //     .binary.stringValue(padTo: 8),
+        //
+        // ((data[1] & 0b01110000) >> 4)
+        //     .binary.stringValue(padTo: 3, prefix: true))
+        // -----------------------------------------------
+        
+        /*
+         Quarter-frame messages are received in this order during playback.
+         Piece 0 is transmitted at the coded moment.
+         When time is running forward, the piece numbers increment from 0–7; with the time that piece 0 is transmitted is the coded instant, and the remaining pieces are transmitted later.
+         If rewinding, data is received in reverse order. Again, piece 0 is transmitted at the coded moment.
+         Since 8 Quarter Frame messages are required to piece together the current SMPTE time, timing lock can't be achieved until the slave has received all 8 messages. This will take from 2 to 4 SMPTE Frames, depending upon when the slave comes online.
+         The Frame number (contained in the first 2 Quarter Frame messages) is the SMPTE Frames Time for when the first Quarter Frame message is sent. But, because it takes 7 more quarter-frames to piece together the current SMPTE Time, when the slave does finally piece the time together, it is actually 2 SMPTE Frames behind the real current time. So, for display purposes, the slave should always add 2 frames to the current time.
+         
+         Piece #  Data byte   Significance
+         -------  ---------   ------------
+         0        0000 ffff   Frame number lsbits
+         1        0001 000f   Frame number msbit
+         2        0010 ssss   Seconds lsbits
+         3        0011 00ss   Seconds msbits
+         4        0100 mmmm   Minutes lsbits
+         5        0101 00mm   Minutes msbits
+         6        0110 hhhh   Hours lsbits
+         7        0111 0rrh   Rate and hours msbit
+         */
+        
+        // update internal registers
+        
+        let quarterFrameReceived = (dataByte & 0b01110000) >> 4
+        
+        // quarter-frame direction
+        direction = MIDI.MTC.Direction(previousQF: lastQuarterFrameReceived,
+                                       newQF: quarterFrameReceived)
+        
+        // only update delta QFs if we can be assured we've already received a QF 0 capture
+        if receivedSyncQFSinceQFBufferComplete {
+            if lastCapturedWholeTimecodeDeltaQFs == nil { lastCapturedWholeTimecodeDeltaQFs = 0 }
             
-            // fps component
-            setMTCFrameRate(rateBits: (data[5] & 0b01100000) >> 5)
+            switch direction {
+            case .forwards: lastCapturedWholeTimecodeDeltaQFs! += 1
+            case .backwards: lastCapturedWholeTimecodeDeltaQFs! -= 1
+            default: break
+            }
+        }
+        
+        switch quarterFrameReceived {
+        case 0b000: // Frames number lsbits -- sync: frame 1 of 2
+            TC_F_lsb = dataByte & 0b00001111
+            if direction == .backwards {
+                rawFrames = Int(TC_F_lsb) + Int(TC_F_msb << 4)
+            }
             
-            // timecode components
-            rawHours = Int(data[5] & 0b00011111) // mask to retrieve the last 5 bits (hour number component)
-            rawMinutes = Int(data[6]) // literal integer
-            rawSeconds = Int(data[7]) // literal integer
-            rawFrames = Int(data[8]) // literal integer
+            TC_F_lsb_received = true
             
-            var tcc = TCC(h: rawHours,
-                          m: rawMinutes,
-                          s: rawSeconds,
-                          f: rawFrames)
+            // capture full timecode if all 8 QFs have already been received in sequence
+            if qfBufferComplete() {
+                receivedSyncQFSinceQFBufferComplete = true
+                
+                if lastCapturedWholeTimecodeDeltaQFs == nil ||
+                    lastCapturedWholeTimecodeDeltaQFs == 8 ||
+                    lastCapturedWholeTimecodeDeltaQFs == -8
+                {
+                    lastCapturedWholeTimecode = TCC(h: rawHours,
+                                                    m: rawMinutes,
+                                                    s: rawSeconds,
+                                                    f: rawFrames)
+                    
+                    lastCapturedWholeTimecodeDirection = direction
+                }
+                
+                lastCapturedWholeTimecodeDeltaQFs = 0
+            }
+            
+        case 0b001: // Frames number msbit
+            TC_F_msb = dataByte & 0b00000001
+            if direction == .forwards {
+                rawFrames = Int(TC_F_lsb) + Int(TC_F_msb << 4)
+            }
+            TC_F_msb_received = true
+            
+        case 0b010: // Seconds lsbits
+            TC_S_lsb = dataByte & 0b00001111
+            if direction == .backwards {
+                rawSeconds = Int(TC_S_lsb) + Int(TC_S_msb << 4)
+            }
+            TC_S_lsb_received = true
+            
+        case 0b011: // Seconds msbits
+            TC_S_msb = dataByte & 0b00000011
+            if direction == .forwards {
+                rawSeconds = Int(TC_S_lsb) + Int(TC_S_msb << 4)
+            }
+            TC_S_msb_received = true
+            
+        case 0b100: // Minutes lsbits -- sync: frame 2 of 2
+            TC_M_lsb = dataByte & 0b00001111
+            if direction == .backwards {
+                rawMinutes = Int(TC_M_lsb) + Int(TC_M_msb << 4)
+            }
+            TC_M_lsb_received = true
+            
+        case 0b101: // Minutes msbits
+            TC_M_msb = dataByte & 0b00000011
+            if direction == .forwards {
+                rawMinutes = Int(TC_M_lsb) + Int(TC_M_msb << 4)
+            }
+            TC_M_msb_received = true
+            
+        case 0b110: // Hours lsbits
+            TC_H_lsb = dataByte & 0b00001111
+            if direction == .backwards {
+                rawHours = Int(TC_H_lsb) + Int(TC_H_msb << 4)
+            }
+            TC_H_lsb_received = true
+            
+        case 0b111: // Rate and Hours msbit
+            TC_H_msb = dataByte & 0b00000001
+            if direction == .forwards {
+                rawHours = Int(TC_H_lsb) + Int(TC_H_msb << 4)
+            }
+            TC_H_msb_received = true
+            
+            setMTCFrameRate(rateBits: (dataByte & 0b00000110) >> 1)
+            
+        default:
+            // this should never happen (all possible 3-bit value cases are covered)
+            break
+        }
+        
+        // update registers
+        lastQuarterFrameReceived = quarterFrameReceived
+        
+        // all 8 QFs must be received to ascertain a full SMTPE timecode
+        // however, do not update timecode until sync QF is reached
+        if qfBufferComplete() && receivedSyncQFSinceQFBufferComplete {
+            
+            var tcc = lastCapturedWholeTimecode
+            
+            guard let lastCapturedWholeTimecodeDeltaQFs = lastCapturedWholeTimecodeDeltaQFs else {
+                preconditionFailure("lastCapturedWholeTimecodeDeltaQFs should not be nil.")
+            }
+            
+            // perform 2-frame offsets depending on direction
+            if lastCapturedWholeTimecodeDeltaQFs >= 0 &&
+                lastCapturedWholeTimecodeDirection != .backwards
+            {
+                if let tc = tcc
+                    .toTimecode(at: mtcFrameRate.directEquivalentFrameRate)?
+                    .adding(wrapping: TCC(f: 2))
+                {
+                    tcc = tc.components
+                }
+            } else if lastCapturedWholeTimecodeDeltaQFs < 0 &&
+                        lastCapturedWholeTimecodeDirection == .backwards
+            {
+                if let tc = tcc
+                    .toTimecode(at: mtcFrameRate.directEquivalentFrameRate)?
+                    .subtracting(wrapping: TCC(f: 2))
+                {
+                    tcc = tc.components
+                }
+            }
             
             // set up a variable to store the actual output frame rate
             let outputFrameRate: Timecode.FrameRate
             
-            // scale frames if local frame rate is set
+            // scale or interpolate based on if local frame rate is set
             // scaling will return nil if frame rates are not compatible
             if let localFrameRate = localFrameRate,
-               let scaledFrames = mtcFrameRate
-                .scaledFrames(fromRawMTCFrames: tcc.f,
-                              quarterFrames: 0,
-                              to: localFrameRate)?
-                .int
+               let scaledFramesDouble = mtcFrameRate.scaledFrames(
+                fromRawMTCFrames: tcc.f,
+                quarterFrames: quarterFrameReceived,
+                to: localFrameRate)
             {
-                tcc.f = scaledFrames
+                let scaledFramesInt = Int(scaledFramesDouble)
+                tcc.f = scaledFramesInt
                 
                 // since scaling succeeded, we know we are outputting the localFrameRate
                 outputFrameRate = localFrameRate
             } else {
+                // use raw MTC frames and interpolate to produce sequential frame numbers
+                
+                // if sync QF 2 of 2 or thereafter
+                if quarterFrameReceived >= 0b100 {
+                    // interpolation: artificially increment MTC frames by 1
+                    tcc.f += 1
+                }
+                
+                // we're outputting the direct equivalent of the MTC stream's frame rate
                 outputFrameRate = mtcFrameRate.directEquivalentFrameRate
             }
             
             let tc = tcc.toTimecode(rawValuesAt: outputFrameRate)
             
-            // update raw timecode values property
+            // set local timecode property
             timecode = tc
             
             let displayNeedsUpdate = lastTimecodeSentToHandler != tcc
             
             lastTimecodeSentToHandler = tcc
             
-            // notify handler that timecode has changed
+            // notify handler timecode has changed at this exact moment
             timecodeChangedHandler?(tc,
-                                    .fullFrame,
+                                    .quarterFrame,
                                     direction,
                                     displayNeedsUpdate)
             
-            return
-            
         }
         
-        // Quarter-frame messages
-        // ----------------------
-        // Since it takes eight quarter-frames for a complete time code message, the complete SMPTE time is updated every two frames.
-        // A quarter-frame message consists of a status byte of 0xF1, followed by a single 7-bit data value: 3 bits to identify the piece, and 4 bits of partial time code.
-        else if data.count == 2 &&
-                    data[0] == 0xF1 {
-            
-            // Verbose debugging - careful when enabling this!
-            // -----------------------------------------------
-            // print("F1",
-            //
-            // data[1]
-            //     .binary.stringValue(padTo: 8),
-            //
-            // ((data[1] & 0b01110000) >> 4)
-            //     .binary.stringValue(padTo: 3, prefix: true))
-            // -----------------------------------------------
-            
-            /*
-             Quarter-frame messages are received in this order during playback.
-             Piece 0 is transmitted at the coded moment.
-             When time is running forward, the piece numbers increment from 0–7; with the time that piece 0 is transmitted is the coded instant, and the remaining pieces are transmitted later.
-             If rewinding, data is received in reverse order. Again, piece 0 is transmitted at the coded moment.
-             Since 8 Quarter Frame messages are required to piece together the current SMPTE time, timing lock can't be achieved until the slave has received all 8 messages. This will take from 2 to 4 SMPTE Frames, depending upon when the slave comes online.
-             The Frame number (contained in the first 2 Quarter Frame messages) is the SMPTE Frames Time for when the first Quarter Frame message is sent. But, because it takes 7 more quarter-frames to piece together the current SMPTE Time, when the slave does finally piece the time together, it is actually 2 SMPTE Frames behind the real current time. So, for display purposes, the slave should always add 2 frames to the current time.
-             
-             Piece #  Data byte   Significance
-             -------  ---------   ------------
-             0        0000 ffff   Frame number lsbits
-             1        0001 000f   Frame number msbit
-             2        0010 ssss   Seconds lsbits
-             3        0011 00ss   Seconds msbits
-             4        0100 mmmm   Minutes lsbits
-             5        0101 00mm   Minutes msbits
-             6        0110 hhhh   Hours lsbits
-             7        0111 0rrh   Rate and hours msbit
-             */
-            
-            // update internal registers
-            
-            let quarterFrameReceived = (data[1] & 0b01110000) >> 4
-            
-            // quarter-frame direction
-            direction = MIDI.MTC.Direction(previousQF: lastQuarterFrameReceived,
-                                           newQF: quarterFrameReceived)
-            
-            // only update delta QFs if we can be assured we've already received a QF 0 capture
-            if receivedSyncQFSinceQFBufferComplete {
-                if lastCapturedWholeTimecodeDeltaQFs == nil { lastCapturedWholeTimecodeDeltaQFs = 0 }
-                
-                switch direction {
-                case .forwards: lastCapturedWholeTimecodeDeltaQFs! += 1
-                case .backwards: lastCapturedWholeTimecodeDeltaQFs! -= 1
-                default: break
-                }
-            }
-            
-            switch quarterFrameReceived {
-            case 0b000: // Frames number lsbits -- sync: frame 1 of 2
-                TC_F_lsb = data[1] & 0b00001111
-                if direction == .backwards {
-                    rawFrames = Int(TC_F_lsb) + Int(TC_F_msb << 4)
-                }
-                
-                TC_F_lsb_received = true
-                
-                // capture full timecode if all 8 QFs have already been received in sequence
-                if qfBufferComplete() {
-                    receivedSyncQFSinceQFBufferComplete = true
-                    
-                    if lastCapturedWholeTimecodeDeltaQFs == nil ||
-                        lastCapturedWholeTimecodeDeltaQFs == 8 ||
-                        lastCapturedWholeTimecodeDeltaQFs == -8
-                    {
-                        lastCapturedWholeTimecode = TCC(h: rawHours,
-                                                        m: rawMinutes,
-                                                        s: rawSeconds,
-                                                        f: rawFrames)
-                        
-                        lastCapturedWholeTimecodeDirection = direction
-                    }
-                    
-                    lastCapturedWholeTimecodeDeltaQFs = 0
-                }
-                
-            case 0b001: // Frames number msbit
-                TC_F_msb = data[1] & 0b00000001
-                if direction == .forwards {
-                    rawFrames = Int(TC_F_lsb) + Int(TC_F_msb << 4)
-                }
-                TC_F_msb_received = true
-                
-            case 0b010: // Seconds lsbits
-                TC_S_lsb = data[1] & 0b00001111
-                if direction == .backwards {
-                    rawSeconds = Int(TC_S_lsb) + Int(TC_S_msb << 4)
-                }
-                TC_S_lsb_received = true
-                
-            case 0b011: // Seconds msbits
-                TC_S_msb = data[1] & 0b00000011
-                if direction == .forwards {
-                    rawSeconds = Int(TC_S_lsb) + Int(TC_S_msb << 4)
-                }
-                TC_S_msb_received = true
-                
-            case 0b100: // Minutes lsbits -- sync: frame 2 of 2
-                TC_M_lsb = data[1] & 0b00001111
-                if direction == .backwards {
-                    rawMinutes = Int(TC_M_lsb) + Int(TC_M_msb << 4)
-                }
-                TC_M_lsb_received = true
-                
-            case 0b101: // Minutes msbits
-                TC_M_msb = data[1] & 0b00000011
-                if direction == .forwards {
-                    rawMinutes = Int(TC_M_lsb) + Int(TC_M_msb << 4)
-                }
-                TC_M_msb_received = true
-                
-            case 0b110: // Hours lsbits
-                TC_H_lsb = data[1] & 0b00001111
-                if direction == .backwards {
-                    rawHours = Int(TC_H_lsb) + Int(TC_H_msb << 4)
-                }
-                TC_H_lsb_received = true
-                
-            case 0b111: // Rate and Hours msbit
-                TC_H_msb = data[1] & 0b00000001
-                if direction == .forwards {
-                    rawHours = Int(TC_H_lsb) + Int(TC_H_msb << 4)
-                }
-                TC_H_msb_received = true
-                
-                setMTCFrameRate(rateBits: (data[1] & 0b00000110) >> 1)
-                
-            default:
-                // this should never happen (all possible 3-bit value cases are covered)
-                break
-            }
-            
-            // update registers
-            lastQuarterFrameReceived = quarterFrameReceived
-            
-            // all 8 QFs must be received to ascertain a full SMTPE timecode
-            // however, do not update timecode until sync QF is reached
-            if qfBufferComplete() && receivedSyncQFSinceQFBufferComplete {
-                
-                var tcc = lastCapturedWholeTimecode
-                
-                guard let lastCapturedWholeTimecodeDeltaQFs = lastCapturedWholeTimecodeDeltaQFs else {
-                    preconditionFailure("lastCapturedWholeTimecodeDeltaQFs should not be nil.")
-                }
-                
-                // perform 2-frame offsets depending on direction
-                if lastCapturedWholeTimecodeDeltaQFs >= 0 &&
-                    lastCapturedWholeTimecodeDirection != .backwards
-                {
-                    if let tc = tcc
-                        .toTimecode(at: mtcFrameRate.directEquivalentFrameRate)?
-                        .adding(wrapping: TCC(f: 2))
-                    {
-                        tcc = tc.components
-                    }
-                } else if lastCapturedWholeTimecodeDeltaQFs < 0 &&
-                            lastCapturedWholeTimecodeDirection == .backwards
-                {
-                    if let tc = tcc
-                        .toTimecode(at: mtcFrameRate.directEquivalentFrameRate)?
-                        .subtracting(wrapping: TCC(f: 2))
-                    {
-                        tcc = tc.components
-                    }
-                }
-                
-                // set up a variable to store the actual output frame rate
-                let outputFrameRate: Timecode.FrameRate
-                
-                // scale or interpolate based on if local frame rate is set
-                // scaling will return nil if frame rates are not compatible
-                if let localFrameRate = localFrameRate,
-                   let scaledFrames = mtcFrameRate
-                    .scaledFrames(fromRawMTCFrames: tcc.f,
-                                  quarterFrames: quarterFrameReceived,
-                                  to: localFrameRate)?
-                    .int
-                {
-                    tcc.f = scaledFrames
-                    
-                    // since scaling succeeded, we know we are outputting the localFrameRate
-                    outputFrameRate = localFrameRate
-                } else {
-                    // use raw MTC frames and interpolate to produce sequential frame numbers
-                    
-                    // if sync QF 2 of 2 or thereafter
-                    if quarterFrameReceived >= 0b100 {
-                        // interpolation: artificially increment MTC frames by 1
-                        tcc.f += 1
-                    }
-                    
-                    // we're outputting the direct equivalent of the MTC stream's frame rate
-                    outputFrameRate = mtcFrameRate.directEquivalentFrameRate
-                }
-                
-                let tc = tcc.toTimecode(rawValuesAt: outputFrameRate)
-                
-                // set local timecode property
-                timecode = tc
-                
-                let displayNeedsUpdate = lastTimecodeSentToHandler != tcc
-                
-                lastTimecodeSentToHandler = tcc
-                
-                // notify handler timecode has changed at this exact moment
-                timecodeChangedHandler?(tc,
-                                        .quarterFrame,
-                                        direction,
-                                        displayNeedsUpdate)
-                
-            }
-            
-            return
-            
-        }
-        
-        // debug:
-        // print("MTC Received Unhandled MIDI Data:", data.hex.stringValue)
+        return
         
     }
     

@@ -6,7 +6,7 @@ let package = Package(
     name: "MIDIKitSync",
 
     platforms: [
-        .macOS(.v10_12), .iOS(.v10),
+        .macOS(.v10_12), .iOS(.v10), .tvOS(.v14), .watchOS(.v7)
     ],
 
     products: [
@@ -19,8 +19,7 @@ let package = Package(
 
     dependencies: [
         .package(url: "https://github.com/orchetect/MIDIKit", .branch("dev")), // from: "0.1.6"),
-        .package(url: "https://github.com/orchetect/TimecodeKit", from: "1.1.4"),
-        .package(url: "https://github.com/orchetect/OTCore", from: "1.1.8")
+        .package(url: "https://github.com/orchetect/TimecodeKit", from: "1.1.4")
     ],
 
     targets: [
@@ -36,8 +35,7 @@ let package = Package(
             name: "MIDIKitSyncTests",
             dependencies: [
                 .target(name: "MIDIKitSync"),
-                .product(name: "TimecodeKit", package: "TimecodeKit"),
-                .product(name: "OTCore-Testing-XCTest", package: "OTCore"),
+                .product(name: "TimecodeKit", package: "TimecodeKit")
             ]
         )
     ]

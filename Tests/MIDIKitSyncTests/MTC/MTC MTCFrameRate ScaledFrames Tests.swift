@@ -7,7 +7,6 @@
 
 import XCTest
 @testable import MIDIKitSync
-import OTCore
 import TimecodeKit
 
 final class MTC_MTCFrameRate_ScaledFrames_Tests: XCTestCase {

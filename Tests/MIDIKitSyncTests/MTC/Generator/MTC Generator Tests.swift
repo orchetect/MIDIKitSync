@@ -7,7 +7,6 @@
 
 import XCTest
 @testable import MIDIKitSync
-import OTCoreTestingXCTest
 import TimecodeKit
 
 final class MTC_Generator_Generator_Tests: XCTestCase {

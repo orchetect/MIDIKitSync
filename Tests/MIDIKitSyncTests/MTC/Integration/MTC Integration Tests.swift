@@ -7,7 +7,6 @@
 
 import XCTest
 @testable import MIDIKitSync
-import OTCore
 import TimecodeKit
 
 final class MTC_Integration_Integration_Tests: XCTestCase {
@@ -65,7 +64,7 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         mtcEnc.increment() // QF 7
         mtcEnc.increment() // QF 0
         XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 04).toTimecode(at: ._24)!)
-        (19 * 4).repeatEach { mtcEnc.increment() } // advance 19 frames (4 QF per frame)
+        for _ in 1...(19 * 4) { mtcEnc.increment() } // advance 19 frames (4 QF per frame)
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 4)
         XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 23).toTimecode(at: ._24)!)
         mtcEnc.increment() // QF 5
@@ -155,7 +154,7 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         mtcEnc.increment() // QF 7
         mtcEnc.increment() // QF 0
         XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 59, f: 04).toTimecode(at: ._29_97_drop)!)
-        (25 * 4).repeatEach { mtcEnc.increment() } // advance 25 frames (4 QF per frame)
+        for _ in 1...(25 * 4) { mtcEnc.increment() } // advance 25 frames (4 QF per frame)
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 4)
         XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 59, f: 29).toTimecode(at: ._29_97_drop)!)
         mtcEnc.increment() // QF 5
@@ -217,7 +216,7 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         mtcEnc.increment() // QF 7
         mtcEnc.increment() // QF 0
         XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 59, f: 04).toTimecode(at: ._29_97_drop)!)
-        (25 * 4).repeatEach { mtcEnc.increment() } // advance 25 frames (4 QF per frame)
+        for _ in 1...(25 * 4) { mtcEnc.increment() } // advance 25 frames (4 QF per frame)
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 4)
         XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 59, f: 29).toTimecode(at: ._29_97_drop)!)
         mtcEnc.increment() // QF 5
@@ -319,7 +318,7 @@ final class MTC_Integration_Integration_Tests: XCTestCase {
         XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 07).toTimecode(at: ._48)!)
         mtcEnc.increment() // QF 0
         XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 08).toTimecode(at: ._48)!)
-        (19 * 4).repeatEach { mtcEnc.increment() } // advance 19 frames (4 QF per frame)
+        for _ in 1...(19 * 4) { mtcEnc.increment() } // advance 19 frames (4 QF per frame)
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 4)
         XCTAssertEqual(_timecode, TCC(h: 1, m: 00, s: 00, f: 46).toTimecode(at: ._48)!)
         mtcEnc.increment() // QF 5

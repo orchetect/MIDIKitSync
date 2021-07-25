@@ -106,9 +106,9 @@ extension MIDI.MTC.MTCFrameRate {
             return nil
         }
         
-        // sanitize inputs
-        let rawMTCFrames = fromRawMTCFrames.clamped(to: 0...)
-        let rawMTCQuarterFrames = quarterFrames.clamped(to: 0...7)
+        // clean inputs
+        let rawMTCFrames = max(0, fromRawMTCFrames)
+        let rawMTCQuarterFrames = min(max(0, quarterFrames), 7)
         
         // baseline check: if MTC frame rate is exactly equivalent to resultant timecode frame rate, skip the scale math
         if self.directEquivalentFrameRate == timecodeRate {

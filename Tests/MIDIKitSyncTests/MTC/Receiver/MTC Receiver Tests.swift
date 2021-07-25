@@ -7,7 +7,6 @@
 
 import XCTest
 @testable import MIDIKitSync
-import OTCore
 import TimecodeKit
 
 final class MTC_Receiver_Receiver_Tests: XCTestCase {
@@ -194,8 +193,8 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         
         // depending on the system running these tests, this test may be too brittle/restrictive and the accuracy may need to be bumped up at some point in the future
         
-        XCTAssertEqual((preSyncLockTime.rawValue.double/10e8) + waitTime,
-                       futureTime.rawValue.double/10e8, accuracy: 0.0008)
+        XCTAssertEqual((Double(preSyncLockTime.rawValue)/10e8) + waitTime,
+                       Double(futureTime.rawValue)/10e8, accuracy: 0.0008)
         
         XCTAssertEqual(preSyncTimecode, lockTimecode)
         

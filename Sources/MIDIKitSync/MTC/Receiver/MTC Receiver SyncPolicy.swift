@@ -3,7 +3,6 @@
 //  MIDIKitSync • https://github.com/orchetect/MIDIKitSync
 //
 
-@_implementationOnly import OTCore
 import TimecodeKit
 
 extension MIDI.MTC.Receiver {
@@ -33,11 +32,11 @@ extension MIDI.MTC.Receiver {
         // MARK: - Internal Methods
         
         internal mutating func setLockFrames(_ value: Int) {
-            lockFrames = value.clamped(to: 0...100)
+            lockFrames = min(max(0, value), 100)
         }
         
         internal mutating func setDropOutFramesFrames(_ value: Int) {
-            dropOutFrames = value.clamped(to: 0...100)
+            dropOutFrames = min(max(0, value), 100)
         }
         
         

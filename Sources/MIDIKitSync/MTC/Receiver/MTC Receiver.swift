@@ -4,7 +4,6 @@
 //
 
 import Foundation
-@_implementationOnly import OTCore
 import TimecodeKit
 
 // MARK: - Receiver
