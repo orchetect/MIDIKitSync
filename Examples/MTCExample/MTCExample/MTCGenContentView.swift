@@ -1,6 +1,6 @@
 //
 //  MTCGenContentView.swift
-//  MIDIKitSyncTestHarness
+//  MTCExample
 //  MIDIKitSync • https://github.com/orchetect/MIDIKitSync
 //
 

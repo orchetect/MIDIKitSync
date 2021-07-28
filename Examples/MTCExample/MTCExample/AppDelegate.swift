@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  MIDIKitSyncTestHarness
+//  MTCExample
 //  MIDIKitSync • https://github.com/orchetect/MIDIKitSync
 //
 
@@ -14,7 +14,7 @@ import OTCore
 class AppDelegate: NSObject, NSApplicationDelegate {
     
     let midiManager: MIDI.IO.Manager = .init(
-        clientName: "MIDIKitSyncTestHarness",
+        clientName: "MTCExample",
         model: "TestApp",
         manufacturer: "Orchetect",
         notificationHandler: nil
