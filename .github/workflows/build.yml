@@ -32,7 +32,7 @@ jobs:
       run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "platform=macOS,arch=x86_64"
     - name: Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "platform=macOS,arch=x86_64"
-      
+  
   macCatalyst:
     name: macCatalyst
     runs-on: macos-latest
@@ -42,7 +42,7 @@ jobs:
       run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "platform=macOS,variant=Mac Catalyst,arch=x86_64"
     - name: Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "platform=macOS,variant=Mac Catalyst,arch=x86_64"
-
+  
   iOS:
     name: iOS
     runs-on: macos-latest # this must be macos, GitHub does not offer iOS directly but we can use xcodebuild
@@ -52,6 +52,14 @@ jobs:
       run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "platform=iOS Simulator,name=iPhone 12"
     - name: iPhone 12 Simulator - Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "platform=iOS Simulator,name=iPhone 12"
+  
+  Examples:
+    name: Examples
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@main
+    - name: MTCExample - Build
+      run: xcodebuild build -project "Examples/MTCExample/MTCExample.xcodeproj" -scheme "MTCExample"
 
 # we flew too close to the sun... tvOS is not yet ready for primetime because CoreMIDI is still in beta for tvOS
 #
