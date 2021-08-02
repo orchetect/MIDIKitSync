@@ -3,6 +3,7 @@
 import PackageDescription
 
 let package = Package(
+    
     name: "MIDIKitSync",
 
     platforms: [
@@ -19,7 +20,7 @@ let package = Package(
 
     dependencies: [
         .package(url: "https://github.com/orchetect/MIDIKit", .branch("dev")), // from: "0.2.0"),
-        .package(url: "https://github.com/orchetect/TimecodeKit", from: "1.1.4")
+        .package(url: "https://github.com/orchetect/TimecodeKit", from: "1.2.3")
     ],
 
     targets: [
@@ -39,4 +40,5 @@ let package = Package(
             ]
         )
     ]
+    
 )
