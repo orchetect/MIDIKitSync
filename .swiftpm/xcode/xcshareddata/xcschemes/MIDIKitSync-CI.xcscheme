@@ -52,6 +52,11 @@
                BlueprintName = "MIDIKitSyncTests"
                ReferencedContainer = "container:">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "MTC_Receiver_Receiver_Tests/testMTC_Receiver_InternalState_QFMessages_Typical()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>
