@@ -426,8 +426,8 @@ extension MIDI.MTC.Decoder: ReceivesMIDIEvents {
             if lastCapturedWholeTimecodeDeltaQFs >= 0 &&
                 lastCapturedWholeTimecodeDirection != .backwards
             {
-                if let tc = tcc
-                    .toTimecode(at: mtcFrameRate.directEquivalentFrameRate)?
+                if let tc = try? tcc
+                    .toTimecode(at: mtcFrameRate.directEquivalentFrameRate)
                     .adding(wrapping: TCC(f: 2))
                 {
                     tcc = tc.components
@@ -435,8 +435,8 @@ extension MIDI.MTC.Decoder: ReceivesMIDIEvents {
             } else if lastCapturedWholeTimecodeDeltaQFs < 0 &&
                         lastCapturedWholeTimecodeDirection == .backwards
             {
-                if let tc = tcc
-                    .toTimecode(at: mtcFrameRate.directEquivalentFrameRate)?
+                if let tc = try? tcc
+                    .toTimecode(at: mtcFrameRate.directEquivalentFrameRate)
                     .subtracting(wrapping: TCC(f: 2))
                 {
                     tcc = tc.components

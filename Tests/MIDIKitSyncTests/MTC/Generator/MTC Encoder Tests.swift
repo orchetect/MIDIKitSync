@@ -153,7 +153,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         
         mtcEnc = MIDI.MTC.Encoder()
         
-        mtcEnc.locate(to: Timecode(TCC(h: 1, m: 20, s: 32, f: 10), at: ._24)!)
+        mtcEnc.locate(to: TCC(h: 1, m: 20, s: 32, f: 10).toTimecode(rawValuesAt: ._24))
         XCTAssertEqual(mtcEnc.localFrameRate, ._24)
         XCTAssertEqual(mtcEnc.timecode.components,
                        TCC(h: 1, m: 20, s: 32, f: 10))
@@ -161,7 +161,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
                        TCC(h: 1, m: 20, s: 32, f: 10))
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
         
-        mtcEnc.locate(to: Timecode(TCC(h: 1, m: 20, s: 32, f: 11), at: ._24)!)
+        mtcEnc.locate(to: TCC(h: 1, m: 20, s: 32, f: 11).toTimecode(rawValuesAt: ._24))
         XCTAssertEqual(mtcEnc.localFrameRate, ._24)
         XCTAssertEqual(mtcEnc.timecode.components,
                        TCC(h: 1, m: 20, s: 32, f: 11))
@@ -169,7 +169,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
                        TCC(h: 1, m: 20, s: 32, f: 10))
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 4)
         
-        mtcEnc.locate(to: Timecode(TCC(h: 1, m: 20, s: 32, f: 12), at: ._24)!)
+        mtcEnc.locate(to: TCC(h: 1, m: 20, s: 32, f: 12).toTimecode(rawValuesAt: ._24))
         XCTAssertEqual(mtcEnc.localFrameRate, ._24)
         XCTAssertEqual(mtcEnc.timecode.components,
                        TCC(h: 1, m: 20, s: 32, f: 12))
@@ -183,7 +183,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         
         mtcEnc = MIDI.MTC.Encoder()
         
-        mtcEnc.locate(to: Timecode(TCC(h: 1, m: 20, s: 32, f: 20), at: ._60)!)
+        mtcEnc.locate(to: TCC(h: 1, m: 20, s: 32, f: 20).toTimecode(rawValuesAt: ._60))
         XCTAssertEqual(mtcEnc.localFrameRate, ._60)
         XCTAssertEqual(mtcEnc.timecode.components,
                        TCC(h: 1, m: 20, s: 32, f: 20))
@@ -191,7 +191,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
                        TCC(h: 1, m: 20, s: 32, f: 10)) // mtc-30 fps
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
         
-        mtcEnc.locate(to: Timecode(TCC(h: 1, m: 20, s: 32, f: 21), at: ._60)!)
+        mtcEnc.locate(to: TCC(h: 1, m: 20, s: 32, f: 21).toTimecode(rawValuesAt: ._60))
         XCTAssertEqual(mtcEnc.localFrameRate, ._60)
         XCTAssertEqual(mtcEnc.timecode.components,
                        TCC(h: 1, m: 20, s: 32, f: 21))
@@ -199,7 +199,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
                        TCC(h: 1, m: 20, s: 32, f: 10)) // mtc-30 fps
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 2)
         
-        mtcEnc.locate(to: Timecode(TCC(h: 1, m: 20, s: 32, f: 22), at: ._60)!)
+        mtcEnc.locate(to: TCC(h: 1, m: 20, s: 32, f: 22).toTimecode(rawValuesAt: ._60))
         XCTAssertEqual(mtcEnc.localFrameRate, ._60)
         XCTAssertEqual(mtcEnc.timecode.components,
                        TCC(h: 1, m: 20, s: 32, f: 22))
@@ -207,7 +207,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
                        TCC(h: 1, m: 20, s: 32, f: 10)) // mtc-30 fps
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 4)
         
-        mtcEnc.locate(to: Timecode(TCC(h: 1, m: 20, s: 32, f: 23), at: ._60)!)
+        mtcEnc.locate(to: TCC(h: 1, m: 20, s: 32, f: 23).toTimecode(rawValuesAt: ._60))
         XCTAssertEqual(mtcEnc.localFrameRate, ._60)
         XCTAssertEqual(mtcEnc.timecode.components,
                        TCC(h: 1, m: 20, s: 32, f: 23))
@@ -215,7 +215,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
                        TCC(h: 1, m: 20, s: 32, f: 10)) // mtc-30 fps
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 6)
         
-        mtcEnc.locate(to: Timecode(TCC(h: 1, m: 20, s: 32, f: 24), at: ._60)!)
+        mtcEnc.locate(to: TCC(h: 1, m: 20, s: 32, f: 24).toTimecode(rawValuesAt: ._60))
         XCTAssertEqual(mtcEnc.localFrameRate, ._60)
         XCTAssertEqual(mtcEnc.timecode.components,
                        TCC(h: 1, m: 20, s: 32, f: 24))
@@ -467,7 +467,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
                            TCC(h: 1, m: 00, s: 00, f: 24),
                            "at: \($0)")
             XCTAssertEqual(mtcEnc.timecode,
-                           TCC(h: 1, m: 00, s: 00, f: 24 * frMult).toTimecode(at: $0)!,
+                           TCC(h: 1, m: 00, s: 00, f: 24 * frMult).toTimecode(rawValuesAt: $0),
                            "at: \($0)")
             
             mtcEnc.increment() // sends qf 0
@@ -488,7 +488,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
                            TCC(h: 1, m: 00, s: 00, f: 24),
                            "at: \($0)")
             XCTAssertEqual(mtcEnc.timecode,
-                           TCC(h: 1, m: 00, s: 01, f: 00 * frMult).toTimecode(at: $0)!,
+                           TCC(h: 1, m: 00, s: 01, f: 00 * frMult).toTimecode(rawValuesAt: $0),
                            "at: \($0)")
             
             mtcEnc.increment() // increments to qf 5
@@ -506,7 +506,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
                            TCC(h: 1, m: 00, s: 01, f: 01),
                            "at: \($0)")
             XCTAssertEqual(mtcEnc.timecode,
-                           TCC(h: 1, m: 00, s: 01, f: 01 * frMult).toTimecode(at: $0)!,
+                           TCC(h: 1, m: 00, s: 01, f: 01 * frMult).toTimecode(rawValuesAt: $0),
                            "at: \($0)")
             
             
@@ -525,7 +525,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
                            TCC(h: 1, m: 00, s: 00, f: 23),
                            "at: \($0)")
             XCTAssertEqual(mtcEnc.timecode,
-                           TCC(h: 1, m: 00, s: 00, f: 23 * frMult).toTimecode(at: $0)!,
+                           TCC(h: 1, m: 00, s: 00, f: 23 * frMult).toTimecode(rawValuesAt: $0),
                            "at: \($0)")
             
             mtcEnc.increment() // sends qf 0
@@ -546,7 +546,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
                            TCC(h: 1, m: 00, s: 00, f: 23),
                            "at: \($0)")
             XCTAssertEqual(mtcEnc.timecode,
-                           TCC(h: 1, m: 00, s: 00, f: 24 * frMult).toTimecode(at: $0)!,
+                           TCC(h: 1, m: 00, s: 00, f: 24 * frMult).toTimecode(rawValuesAt: $0),
                            "at: \($0)")
             
             mtcEnc.increment() // increments to qf 5
@@ -564,7 +564,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
                            TCC(h: 1, m: 00, s: 01, f: 00),
                            "at: \($0)")
             XCTAssertEqual(mtcEnc.timecode,
-                           TCC(h: 1, m: 00, s: 01, f: 00 * frMult).toTimecode(at: $0)!,
+                           TCC(h: 1, m: 00, s: 01, f: 00 * frMult).toTimecode(rawValuesAt: $0),
                            "at: \($0)")
             
             mtcEnc.increment() // increments to qf 1
@@ -582,7 +582,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
                            TCC(h: 1, m: 00, s: 01, f: 00),
                            "at: \($0)")
             XCTAssertEqual(mtcEnc.timecode,
-                           TCC(h: 1, m: 00, s: 01, f: 01 * frMult).toTimecode(at: $0)!,
+                           TCC(h: 1, m: 00, s: 01, f: 01 * frMult).toTimecode(rawValuesAt: $0),
                            "at: \($0)")
             
             mtcEnc.increment() // increments to qf 5
@@ -600,7 +600,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
                            TCC(h: 1, m: 00, s: 01, f: 02),
                            "at: \($0)")
             XCTAssertEqual(mtcEnc.timecode,
-                           TCC(h: 1, m: 00, s: 01, f: 02 * frMult).toTimecode(at: $0)!,
+                           TCC(h: 1, m: 00, s: 01, f: 02 * frMult).toTimecode(rawValuesAt: $0),
                            "at: \($0)")
             
         }
@@ -718,11 +718,11 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         
         // full-frame MTC messages
         
-        mtcEnc.locate(to: TCC(h: 1, m: 02, s: 03, f: 4).toTimecode(at: ._24)!)
+        mtcEnc.locate(to: TCC(h: 1, m: 02, s: 03, f: 4).toTimecode(rawValuesAt: ._24))
         
         XCTAssertEqual(_midiEvents, [kMIDIEvent.MTC_FullFrame._01_02_03_04_at_24fps])
         
-        mtcEnc.locate(to: TCC(h: 2, m: 11, s: 17, f: 20).toTimecode(at: ._25)!)
+        mtcEnc.locate(to: TCC(h: 2, m: 11, s: 17, f: 20).toTimecode(rawValuesAt: ._25))
         
         XCTAssertEqual(_midiEvents, [kMIDIEvent.MTC_FullFrame._02_11_17_20_at_25fps])
         
@@ -748,7 +748,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         // 24fps QFs starting at 02:03:04:06, locking at 02:03:04:08 (+ 2 MTC frame offset)
         
         // start by locating to a timecode
-        mtcEnc.locate(to: TCC(h: 2, m: 03, s: 04, f: 06).toTimecode(at: ._24)!)
+        mtcEnc.locate(to: TCC(h: 2, m: 03, s: 04, f: 06).toTimecode(rawValuesAt: ._24))
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
         
         mtcEnc.increment() // doesn't increment; sends first quarter-frame
@@ -838,7 +838,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
                        ])
         
         mtcEnc = MIDI.MTC.Encoder()
-        mtcEnc.locate(to: TCC(h: 1, m: 02, s: 03, f: 04).toTimecode(at: ._29_97_drop)!)
+        mtcEnc.locate(to: TCC(h: 1, m: 02, s: 03, f: 04).toTimecode(rawValuesAt: ._29_97_drop))
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 1, m: 02, s: 03, f: 04))
@@ -852,7 +852,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
                         0xF7
                        ])
         
-        mtcEnc.locate(to: TCC(h: 1, m: 02, s: 03, f: 05).toTimecode(at: ._29_97_drop)!)
+        mtcEnc.locate(to: TCC(h: 1, m: 02, s: 03, f: 05).toTimecode(rawValuesAt: ._29_97_drop))
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 1, m: 02, s: 03, f: 05))
@@ -867,7 +867,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
                        ])
         
         mtcEnc = MIDI.MTC.Encoder()
-        mtcEnc.locate(to: TCC(h: 2, m: 04, s: 06, f: 08).toTimecode(at: ._30)!)
+        mtcEnc.locate(to: TCC(h: 2, m: 04, s: 06, f: 08).toTimecode(rawValuesAt: ._30))
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 2, m: 04, s: 06, f: 08))
@@ -886,7 +886,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         mtcEnc = MIDI.MTC.Encoder()
         
         // scales to MTC-24 fps
-        mtcEnc.locate(to: TCC(h: 2, m: 04, s: 06, f: 08).toTimecode(at: ._48)!)
+        mtcEnc.locate(to: TCC(h: 2, m: 04, s: 06, f: 08).toTimecode(rawValuesAt: ._48))
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 2, m: 04, s: 06, f: 04))
@@ -901,7 +901,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
                        ])
         
         // scales to MTC-24 fps
-        mtcEnc.locate(to: TCC(h: 2, m: 04, s: 06, f: 09).toTimecode(at: ._48)!)
+        mtcEnc.locate(to: TCC(h: 2, m: 04, s: 06, f: 09).toTimecode(rawValuesAt: ._48))
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 2, m: 04, s: 06, f: 04))
@@ -916,7 +916,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
                        ])
         
         // scales to MTC-24 fps
-        mtcEnc.locate(to: TCC(h: 2, m: 04, s: 06, f: 10).toTimecode(at: ._48)!)
+        mtcEnc.locate(to: TCC(h: 2, m: 04, s: 06, f: 10).toTimecode(rawValuesAt: ._48))
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 2, m: 04, s: 06, f: 05))
@@ -975,7 +975,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
                        ])
         
         mtcEnc = initNewEnc()
-        mtcEnc.locate(to: TCC(h: 1, m: 02, s: 03, f: 04).toTimecode(at: ._29_97_drop)!)
+        mtcEnc.locate(to: TCC(h: 1, m: 02, s: 03, f: 04).toTimecode(rawValuesAt: ._29_97_drop))
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 1, m: 02, s: 03, f: 04))
@@ -989,7 +989,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
                         0xF7
                        ])
         
-        mtcEnc.locate(to: TCC(h: 1, m: 02, s: 03, f: 05).toTimecode(at: ._29_97_drop)!)
+        mtcEnc.locate(to: TCC(h: 1, m: 02, s: 03, f: 05).toTimecode(rawValuesAt: ._29_97_drop))
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 1, m: 02, s: 03, f: 05))
@@ -1004,7 +1004,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
                        ])
         
         mtcEnc = initNewEnc()
-        mtcEnc.locate(to: TCC(h: 2, m: 04, s: 06, f: 08).toTimecode(at: ._30)!)
+        mtcEnc.locate(to: TCC(h: 2, m: 04, s: 06, f: 08).toTimecode(rawValuesAt: ._30))
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 2, m: 04, s: 06, f: 08))
@@ -1023,7 +1023,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         mtcEnc = initNewEnc()
         
         // scales to MTC-24 fps
-        mtcEnc.locate(to: TCC(h: 2, m: 04, s: 06, f: 08).toTimecode(at: ._48)!)
+        mtcEnc.locate(to: TCC(h: 2, m: 04, s: 06, f: 08).toTimecode(rawValuesAt: ._48))
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 2, m: 04, s: 06, f: 04))
@@ -1038,7 +1038,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
                        ])
         
         // scales to MTC-24 fps
-        mtcEnc.locate(to: TCC(h: 2, m: 04, s: 06, f: 09).toTimecode(at: ._48)!)
+        mtcEnc.locate(to: TCC(h: 2, m: 04, s: 06, f: 09).toTimecode(rawValuesAt: ._48))
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 2, m: 04, s: 06, f: 04))
@@ -1053,7 +1053,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
                        ])
         
         // scales to MTC-24 fps
-        mtcEnc.locate(to: TCC(h: 2, m: 04, s: 06, f: 10).toTimecode(at: ._48)!)
+        mtcEnc.locate(to: TCC(h: 2, m: 04, s: 06, f: 10).toTimecode(rawValuesAt: ._48))
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 2, m: 04, s: 06, f: 05))
@@ -1078,7 +1078,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         
         Timecode.FrameRate.allCases.forEach {
             
-            mtcEnc.locate(to: TCC(h: 2, m: 4, s: 6, f: 0).toTimecode(at: $0)!)
+            mtcEnc.locate(to: TCC(h: 2, m: 4, s: 6, f: 0).toTimecode(rawValuesAt: $0))
             mtcEnc.mtcComponents.f = 8
             
             mtcEnc.mtcQuarterFrame = 0
@@ -1126,7 +1126,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         
         // test large numbers, but still within spec
         
-        mtcEnc.locate(to: TCC(h: 23, m: 59, s: 58, f: 28).toTimecode(at: ._30)!)
+        mtcEnc.locate(to: TCC(h: 23, m: 59, s: 58, f: 28).toTimecode(rawValuesAt: ._30))
         
         mtcEnc.mtcQuarterFrame = 0
         XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().rawBytes,

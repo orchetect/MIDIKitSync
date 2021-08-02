@@ -323,7 +323,8 @@ extension MIDI.MTC.Receiver {
             if state == .freewheeling {
                 
                 if incomingTC - freewheelPreviousTimecode
-                    == Timecode(TCC(f: 1), at: localFrameRate ?? incomingTC.frameRate)
+                    == (try? Timecode(TCC(f: 1),
+                                      at: localFrameRate ?? incomingTC.frameRate))
                 {
                     freewheelSequentialFrames += 1
                 } else {

@@ -230,7 +230,7 @@ extension MIDI.MTC {
         public func start(at realTime: TimeInterval,
                           frameRate: Timecode.FrameRate) {
             
-            guard let tc = Timecode(
+            guard let tc = try? Timecode(
                 realTimeValue: realTime,
                 at: frameRate,
                 limit: ._24hours

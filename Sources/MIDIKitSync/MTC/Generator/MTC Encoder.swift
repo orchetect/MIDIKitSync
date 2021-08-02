@@ -173,7 +173,7 @@ extension MIDI.MTC {
                 if mtcQuarterFrame < 7 {
                     mtcQuarterFrame += 1
                 } else {
-                    guard var tc = Timecode(
+                    guard var tc = try? Timecode(
                         mtcComponents,
                         at: mtcFrameRate.directEquivalentFrameRate
                     ) else { return }
@@ -201,7 +201,7 @@ extension MIDI.MTC {
                 if mtcQuarterFrame > 0 {
                     mtcQuarterFrame -= 1
                 } else {
-                    guard var tc = Timecode(
+                    guard var tc = try? Timecode(
                         mtcComponents,
                         at: mtcFrameRate.directEquivalentFrameRate
                     ) else { return }
