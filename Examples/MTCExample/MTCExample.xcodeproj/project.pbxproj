@@ -8,11 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		E2639D0726B145EE00AD0607 /* MIDIKitSync in Frameworks */ = {isa = PBXBuildFile; productRef = E2639D0626B145EE00AD0607 /* MIDIKitSync */; };
-		E2639D0926B145EE00AD0607 /* SwiftRadix in Frameworks */ = {isa = PBXBuildFile; productRef = E2639D0826B145EE00AD0607 /* SwiftRadix */; };
 		E275EAB02679A444008E396D /* MTCRecContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E275EAAF2679A444008E396D /* MTCRecContentView.swift */; };
 		E275EAB42679A493008E396D /* MTCGenContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E275EAB32679A493008E396D /* MTCGenContentView.swift */; };
 		E27E3FA025A6E5C700F4B78E /* Audio.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27E3F9F25A6E5C700F4B78E /* Audio.swift */; };
 		E29EF039267BF71B00282F94 /* DunneAudioKit in Frameworks */ = {isa = PBXBuildFile; productRef = E29EF038267BF71B00282F94 /* DunneAudioKit */; };
+		E2B82F4E26B7F2A3006AF638 /* SwiftRadix in Frameworks */ = {isa = PBXBuildFile; productRef = E2B82F4D26B7F2A3006AF638 /* SwiftRadix */; };
 		E2BE847F268BC6680034F62C /* MIDIKitSync Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2BE847E268BC6680034F62C /* MIDIKitSync Extensions.swift */; };
 		E2E635B925EE4CE10039B8CF /* OTCore in Frameworks */ = {isa = PBXBuildFile; productRef = E2E635B825EE4CE10039B8CF /* OTCore */; };
 		E2FAC4DE257884E000A6DD31 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2FAC4DD257884E000A6DD31 /* AppDelegate.swift */; };
@@ -44,7 +44,7 @@
 				E2639D0726B145EE00AD0607 /* MIDIKitSync in Frameworks */,
 				E29EF039267BF71B00282F94 /* DunneAudioKit in Frameworks */,
 				E2E635B925EE4CE10039B8CF /* OTCore in Frameworks */,
-				E2639D0926B145EE00AD0607 /* SwiftRadix in Frameworks */,
+				E2B82F4E26B7F2A3006AF638 /* SwiftRadix in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,7 +121,7 @@
 				E2E635B825EE4CE10039B8CF /* OTCore */,
 				E29EF038267BF71B00282F94 /* DunneAudioKit */,
 				E2639D0626B145EE00AD0607 /* MIDIKitSync */,
-				E2639D0826B145EE00AD0607 /* SwiftRadix */,
+				E2B82F4D26B7F2A3006AF638 /* SwiftRadix */,
 			);
 			productName = MTCExample;
 			productReference = E2FAC4DA257884E000A6DD31 /* MTCExample.app */;
@@ -422,15 +422,15 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = MIDIKitSync;
 		};
-		E2639D0826B145EE00AD0607 /* SwiftRadix */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E29EF02D267BF47F00282F94 /* XCRemoteSwiftPackageReference "SwiftRadix" */;
-			productName = SwiftRadix;
-		};
 		E29EF038267BF71B00282F94 /* DunneAudioKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E29EF037267BF71B00282F94 /* XCRemoteSwiftPackageReference "DunneAudioKit" */;
 			productName = DunneAudioKit;
+		};
+		E2B82F4D26B7F2A3006AF638 /* SwiftRadix */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E29EF02D267BF47F00282F94 /* XCRemoteSwiftPackageReference "SwiftRadix" */;
+			productName = SwiftRadix;
 		};
 		E2E635B825EE4CE10039B8CF /* OTCore */ = {
 			isa = XCSwiftPackageProductDependency;
