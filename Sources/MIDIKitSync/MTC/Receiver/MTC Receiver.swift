@@ -139,7 +139,9 @@ extension MIDI.MTC {
             
             timer.setEventHandler { [weak self] in
                 
-                self?.timerFired()
+                self?.queue.async {
+                    self?.timerFired()
+                }
                 
             }
             
@@ -249,7 +251,7 @@ extension MIDI.MTC.Receiver: ReceivesMIDIEvents {
         
         // The decoder's midiIn can trigger handler callbacks as a result, which will in turn all be executed on the queue
         
-        queue.async {
+        queue.sync {
             self.decoder.midiIn(event: event)
         }
         

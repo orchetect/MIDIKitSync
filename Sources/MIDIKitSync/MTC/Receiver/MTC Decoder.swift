@@ -42,9 +42,11 @@ extension MIDI.MTC {
         // MARK: - Public properties
         
         /// Last timecode formed from incoming MTC data
+        @MIDI.AtomicAccess
         public internal(set) var timecode = Timecode(at: ._30)
         
         /// The base MTC frame rate last received
+        @MIDI.AtomicAccess
         public internal(set) var mtcFrameRate: MTCFrameRate = .mtc30 {
             didSet {
                 if mtcFrameRate != oldValue {
@@ -58,9 +60,11 @@ extension MIDI.MTC {
         /// When set, MTC frame numbers will be scaled to real frame rate frame numbers, but only when the incoming MTC frame rate and the `localFrameRate` are compatible.
         ///
         /// Remember to also set this any time the local frame rate changes so the receiver can interpret the incoming MTC accordingly.
-        @MIDI.AtomicAccess public var localFrameRate: Timecode.FrameRate? = nil
+        @MIDI.AtomicAccess
+        public var localFrameRate: Timecode.FrameRate? = nil
         
         /// Status of the direction of MTC quarter-frames received
+        @MIDI.AtomicAccess
         public internal(set) var direction: Direction = .forwards
         
         
