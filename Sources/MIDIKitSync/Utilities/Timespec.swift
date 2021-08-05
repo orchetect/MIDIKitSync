@@ -37,7 +37,7 @@ import Darwin
 ///
 /// - returns: `timespec(tv_sec: Int, tv_nsec: Int)` where `tv_sec` is seconds and `tc_nsec` is nanoseconds
 @available(OSX 10.12, iOS 10.0, tvOS 10.0, watchOS 3.0, *)
-@inlinable internal func clock_gettime_monotonic_raw() -> timespec {
+@inlinable internal func otc_clock_gettime_monotonic_raw() -> timespec {
     
     var uptime = timespec()
     
@@ -55,11 +55,11 @@ import Darwin
 extension timespec {
     
     /// Convenience constructor from floating point seconds value
-    @inlinable internal init<T: BinaryFloatingPoint>(seconds floatingPoint: T) {
+    @inlinable internal init<T: BinaryFloatingPoint>(floatSeconds bfp: T) {
         
         self.init()
         
-        let intVal = Int(floatingPoint * 1_000_000_000)
+        let intVal = Int(bfp * 1_000_000_000)
         
         tv_nsec = intVal % 1_000_000_000
         
@@ -72,67 +72,77 @@ extension timespec {
 
 // MARK: - Timespec operators and comparison
 
-@inlinable internal func + (lhs: timespec, rhs: timespec) -> timespec {
+extension timespec {
     
-    let nsRaw = rhs.tv_nsec + lhs.tv_nsec
-    
-    let ns = nsRaw % 1_000_000_000
-    
-    let s = lhs.tv_sec + rhs.tv_sec + (nsRaw / 1_000_000_000)
-    
-    return timespec(tv_sec: s, tv_nsec: ns)
-    
-}
-
-@inlinable internal func - (lhs: timespec, rhs: timespec) -> timespec {
-    
-    let nsRaw = lhs.tv_nsec - rhs.tv_nsec
-    
-    if nsRaw >= 0 {
+    @inlinable internal func adding(_ rhs: timespec) -> timespec {
+        
+        let nsRaw = rhs.tv_nsec + self.tv_nsec
         
         let ns = nsRaw % 1_000_000_000
         
-        let s = lhs.tv_sec - rhs.tv_sec + (nsRaw / 1_000_000_000)
-        
-        return timespec(tv_sec: s, tv_nsec: ns)
-        
-    } else {
-        
-        // roll under
-        
-        let ns = 1_000_000_000 - (-nsRaw % 1_000_000_000)
-        
-        let s = lhs.tv_sec - rhs.tv_sec - 1 - (-nsRaw / 1_000_000_000)
+        let s = self.tv_sec + rhs.tv_sec + (nsRaw / 1_000_000_000)
         
         return timespec(tv_sec: s, tv_nsec: ns)
         
     }
     
-}
-
-extension timespec: Equatable {
-    
-    @inlinable static public func == (lhs: Self, rhs: Self) -> Bool {
+    @inlinable internal func subtracting(_ rhs: timespec) -> timespec {
         
-        lhs.tv_sec == rhs.tv_sec &&
-            lhs.tv_nsec == rhs.tv_nsec
+        let nsRaw = self.tv_nsec - rhs.tv_nsec
+        
+        if nsRaw >= 0 {
+            
+            let ns = nsRaw % 1_000_000_000
+            
+            let s = self.tv_sec - rhs.tv_sec + (nsRaw / 1_000_000_000)
+            
+            return timespec(tv_sec: s, tv_nsec: ns)
+            
+        } else {
+            
+            // roll under
+            
+            let ns = 1_000_000_000 - (-nsRaw % 1_000_000_000)
+            
+            let s = self.tv_sec - rhs.tv_sec - 1 - (-nsRaw / 1_000_000_000)
+            
+            return timespec(tv_sec: s, tv_nsec: ns)
+            
+        }
         
     }
     
 }
 
-extension timespec: Comparable {
+extension timespec {
     
-    @inlinable static public func < (lhs: timespec, rhs: timespec) -> Bool {
+    @inlinable internal func isEqual(to rhs: Self) -> Bool {
         
-        if lhs.tv_sec < rhs.tv_sec { return true }
-        if lhs.tv_sec > rhs.tv_sec { return false }
+        self.tv_sec == rhs.tv_sec &&
+            self.tv_nsec == rhs.tv_nsec
+        
+    }
+    
+}
+
+extension timespec {
+    
+    @inlinable internal func isLess(than rhs: timespec) -> Bool {
+        
+        if self.tv_sec < rhs.tv_sec { return true }
+        if self.tv_sec > rhs.tv_sec { return false }
         
         // seconds equate; now test nanoseconds
         
-        if lhs.tv_nsec < rhs.tv_nsec { return true }
+        if self.tv_nsec < rhs.tv_nsec { return true }
         
         return false
+        
+    }
+    
+    @inlinable internal func isGreater(than rhs: timespec) -> Bool {
+        
+        !self.isLess(than: rhs)
         
     }
     

@@ -212,9 +212,9 @@ extension MIDI.MTC {
             
             // this will be called by the timer which operates on our internal queue, so we don't need to wrap this in queue.async { }
             
-            let timeNow = clock_gettime_monotonic_raw()
+            let timeNow = otc_clock_gettime_monotonic_raw()
             
-            let clockDiff = timeNow - timeLastQuarterFrameReceived
+            let clockDiff = timeNow.subtracting(timeLastQuarterFrameReceived)
             
             // increment state from preSync to chasing once requisite frames have elapsed
             
@@ -235,16 +235,18 @@ extension MIDI.MTC {
                          at: decoder.localFrameRate ?? ._30)
                 .realTimeValue
             
-            let freewheelTimeout = timespec(seconds: dropOutFramesDuration)
+            let freewheelTimeout = timespec(floatSeconds: dropOutFramesDuration)
             
             // if >20ms window of time since last quarter frame, assume MTC message stream has been stopped/interrupted or being received at a speed less than realtime (ie: when Pro Tools plays back at half-speed) and reset our internal tracker
-            if clockDiff > continuousQFTimeout && clockDiff < freewheelTimeout {
+            if clockDiff.isGreater(than: continuousQFTimeout)
+                && clockDiff.isLess(than: freewheelTimeout)
+            {
                 
                 decoder.resetQFBuffer()
                 
                 state = .freewheeling
                 
-            } else if clockDiff > freewheelTimeout {
+            } else if clockDiff.isGreater(than: freewheelTimeout) {
                 
                 state = .idle
                 timer.stop()
@@ -308,7 +310,7 @@ extension MIDI.MTC.Receiver {
             }
             
             // log quarter-frame timestamp
-            let timeNow = clock_gettime_monotonic_raw()
+            let timeNow = otc_clock_gettime_monotonic_raw()
             timeLastQuarterFrameReceived = timeNow
             
             // update state
