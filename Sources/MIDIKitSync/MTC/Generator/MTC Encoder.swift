@@ -127,8 +127,8 @@ extension MIDI.MTC {
                            frameRate: Timecode.FrameRate? = nil,
                            transmitFullFrame: FullFrameBehavior = .ifDifferent) {
             
-            if let frameRate = frameRate {
-                setLocalFrameRate(frameRate)
+            if let unwrappedFrameRate = frameRate {
+                setLocalFrameRate(unwrappedFrameRate)
             }
             
             // Step 1: set Encoder's internal MTC components

@@ -127,7 +127,7 @@ struct MTCRecContentView: View {
             .frame(width: 250)
             
             HStack {
-                if let localFrameRate = localFrameRate {
+                if let unwrappedLocalFrameRate = localFrameRate {
                     VStack {
                         Text("Compatible remote frame rates (\(localFrameRate.compatibleGroup.stringValue)):")
                         

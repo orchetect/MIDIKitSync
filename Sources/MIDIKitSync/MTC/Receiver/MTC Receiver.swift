@@ -131,8 +131,8 @@ extension MIDI.MTC {
             
             timecode = Timecode(at: initialLocalFrameRate ?? ._30)
             
-            if let syncPolicy = syncPolicy {
-                self.syncPolicy = syncPolicy
+            if let unwrappedSyncPolicy = syncPolicy {
+                self.syncPolicy = unwrappedSyncPolicy
             }
             
             // queue
@@ -288,8 +288,8 @@ extension MIDI.MTC.Receiver {
         // determine frame rate compatibility
         var frameRateIsCompatible = true
         
-        if let localFrameRate = decoder.localFrameRate,
-           !incomingTC.frameRate.isCompatible(with: localFrameRate) {
+        if let unwrappedLocalFrameRate = decoder.localFrameRate,
+           !incomingTC.frameRate.isCompatible(with: unwrappedLocalFrameRate) {
             frameRateIsCompatible = false
         }
         
