@@ -34,16 +34,25 @@ extension MIDI.MTC {
         }
         
         /// Property updated whenever incoming MTC timecode changes.
+        @MIDI.AtomicAccess
         public private(set) var timecode: Timecode
         
         /// The frame rate the local system is using.
         /// Remember to also set this any time the local frame rate changes so the receiver can interpret the incoming MTC accordingly.
         public var localFrameRate: Timecode.FrameRate? {
             get {
-                decoder.localFrameRate
+                var getMTCFrameRate: Timecode.FrameRate? = nil
+                
+                queue.sync {
+                    getMTCFrameRate = decoder.localFrameRate
+                }
+                
+                return getMTCFrameRate
             }
             set {
-                decoder.localFrameRate = newValue
+                queue.sync {
+                    decoder.localFrameRate = newValue
+                }
             }
         }
         
@@ -51,12 +60,28 @@ extension MIDI.MTC {
         /// 
         /// This property should only be inspected purely for developer informational or diagnostic purposes. For production code or any logic related to MTC, it should be ignored -- only the `localFrameRate` property is used for automatic validation and scaling of incoming timecode.
         public var mtcFrameRate: MTCFrameRate {
-            decoder.mtcFrameRate
+            
+            var getMTCFrameRate: MTCFrameRate!
+            
+            queue.sync {
+                getMTCFrameRate = decoder.mtcFrameRate
+            }
+            
+            return getMTCFrameRate
+            
         }
         
         /// Status of the direction of MTC quarter-frames received
         public var direction: Direction {
-            decoder.direction
+            
+            var getDirection: Direction!
+            
+            queue.sync {
+                getDirection = decoder.direction
+            }
+            
+            return getDirection
+            
         }
         
         /// Behavior governing how locking occurs prior to chase
@@ -72,18 +97,6 @@ extension MIDI.MTC {
                                              _ event: MessageType,
                                              _ direction: Direction,
                                              _ displayNeedsUpdate: Bool) -> Void)? = nil
-        
-        /// Sets the closure called when a meaningful change to the timecode has occurred which would require its display to be updated.
-        ///
-        /// Implement this closure for when you only want to display timecode and do not need to sync to MTC.
-        public func setTimecodeChangedHandler(_ handler: ((_ timecode: Timecode,
-                                                           _ event: MessageType,
-                                                           _ direction: Direction,
-                                                           _ displayNeedsUpdate: Bool) -> Void)?) {
-            
-            timecodeChangedHandler = handler
-            
-        }
         
         /// Called when the MTC receiver's state changes
         internal var stateChangedHandler: ((_ state: State) -> Void)? = nil
@@ -164,8 +177,7 @@ extension MIDI.MTC {
                 
             }
             
-            // updates decoder's localFrameRate if not already updated
-            localFrameRate = initialLocalFrameRate
+            decoder.localFrameRate = initialLocalFrameRate
             
             // store handler closures
             
@@ -220,7 +232,7 @@ extension MIDI.MTC {
             
             let dropOutFramesDuration =
                 Timecode(wrapping: TCC(f: syncPolicy.dropOutFrames),
-                         at: localFrameRate ?? ._30)
+                         at: decoder.localFrameRate ?? ._30)
                 .realTimeValue
             
             let freewheelTimeout = timespec(seconds: dropOutFramesDuration)
@@ -276,7 +288,7 @@ extension MIDI.MTC.Receiver {
         // determine frame rate compatibility
         var frameRateIsCompatible = true
         
-        if let localFrameRate = localFrameRate,
+        if let localFrameRate = decoder.localFrameRate,
            !incomingTC.frameRate.isCompatible(with: localFrameRate) {
             frameRateIsCompatible = false
         }
@@ -329,7 +341,7 @@ extension MIDI.MTC.Receiver {
                 
                 if incomingTC - freewheelPreviousTimecode
                     == (try? Timecode(TCC(f: 1),
-                                      at: localFrameRate ?? incomingTC.frameRate))
+                                      at: decoder.localFrameRate ?? incomingTC.frameRate))
                 {
                     freewheelSequentialFrames += 1
                 } else {
@@ -348,7 +360,7 @@ extension MIDI.MTC.Receiver {
                 // calculate time until lock
                 
                 let preSyncFrames = Timecode(wrapping: TCC(f: syncPolicy.lockFrames),
-                                             at: localFrameRate ?? incomingTC.frameRate)
+                                             at: decoder.localFrameRate ?? incomingTC.frameRate)
                 let prerollDuration = Int(preSyncFrames.realTimeValue * 1_000_000) // microseconds
                 
                 let now = DispatchTime.now() // same as DispatchTime(rawValue: mach_absolute_time())
