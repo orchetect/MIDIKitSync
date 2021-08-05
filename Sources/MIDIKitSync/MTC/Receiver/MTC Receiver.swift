@@ -153,10 +153,10 @@ extension MIDI.MTC {
             
             timer.setEventHandler { [weak self] in
                 
-                guard let self = self else { return }
+                guard let strongSelf = self else { return }
                 
-                self.queue.async {
-                    self.timerFired()
+                strongSelf.queue.async {
+                    strongSelf.timerFired()
                 }
                 
             }
