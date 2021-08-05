@@ -13,26 +13,24 @@ final class MTC_Generator_Generator_Tests: XCTestCase {
     
     func testMTC_Generator_Default() {
         
+        // just testing variations on syntax
+        
         let mtcGen1 = MIDI.MTC.Generator()
         mtcGen1.midiOutHandler = { [weak self] (midiMessage) in
-            // send midi message here
+            _ = self
             _ = midiMessage
-            self?.XCTWait(sec: 0.0)
         }
         
         let _ = MIDI.MTC.Generator { [weak self] (midiMessage) in
-            // send midi message here
+            _ = self
             _ = midiMessage
-            self?.XCTWait(sec: 0.0)
         }
         
         let _ = MIDI.MTC.Generator(midiOutHandler: { (midiMessage) in
-            //yourMIDIPort.send(midiBytes)
             _ = midiMessage
         })
         
         let _ = MIDI.MTC.Generator { (midiMessage) in
-            //yourMIDIPort.send(midiBytes)
             _ = midiMessage
         }
         

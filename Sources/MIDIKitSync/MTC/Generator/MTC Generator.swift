@@ -106,8 +106,6 @@ extension MIDI.MTC {
                 
             }
             
-            setTimerRate(from: timecode.frameRate)
-            
             queue.sync {
                 
                 // encoder setup
@@ -195,7 +193,7 @@ extension MIDI.MTC {
             queue.sync {
                 
                 encoder.locate(to: timecode, transmitFullFrame: locateBehavior)
-                setTimerRate(from: timecode.frameRate)
+                setTimerRate(from: encoder.localFrameRate)
                 
             }
             
@@ -208,7 +206,7 @@ extension MIDI.MTC {
             queue.sync {
                 
                 encoder.locate(to: components, transmitFullFrame: locateBehavior)
-                setTimerRate(from: timecode.frameRate)
+                setTimerRate(from: encoder.localFrameRate)
                 
             }
             
@@ -221,6 +219,7 @@ extension MIDI.MTC {
                 
                 state = .generating
                 
+                setTimerRate(from: encoder.localFrameRate)
                 timer.restart()
                 
             }
