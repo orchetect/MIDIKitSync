@@ -21,7 +21,8 @@ extension MIDI.MTC {
         
         public private(set) var name: String
         
-        @MIDI.AtomicAccess public private(set) var state: State = .idle {
+        @MIDI.AtomicAccess
+        public private(set) var state: State = .idle {
             didSet {
                 if state != oldValue {
                     let newState = state
