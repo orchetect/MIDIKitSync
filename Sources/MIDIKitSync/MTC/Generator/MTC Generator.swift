@@ -79,17 +79,17 @@ extension MIDI.MTC {
                                            queue: queue,
                                            eventHandler: { })
             
+            timer.setEventHandler { [weak self] in
+                
+                guard let self = self else { return }
+                
+                self.timerFired()
+                
+            }
+            
+            setTimerRate(from: timecode.frameRate)
+            
             queue.sync {
-                
-                timer.setEventHandler { [weak self] in
-                    
-                    guard let self = self else { return }
-                    
-                    self.timerFired()
-                    
-                }
-                
-                setTimerRate(from: timecode.frameRate)
                 
                 // encoder setup
                 
