@@ -422,12 +422,12 @@ extension MIDI.MTC.Decoder: ReceivesMIDIEvents {
             
             var tcc = lastCapturedWholeTimecode
             
-            guard let lastCapturedWholeTimecodeDeltaQFs = lastCapturedWholeTimecodeDeltaQFs else {
+            guard let unwrappedLastCapturedWholeTimecodeDeltaQFs = lastCapturedWholeTimecodeDeltaQFs else {
                 preconditionFailure("lastCapturedWholeTimecodeDeltaQFs should not be nil.")
             }
             
             // perform 2-frame offsets depending on direction
-            if lastCapturedWholeTimecodeDeltaQFs >= 0 &&
+            if unwrappedLastCapturedWholeTimecodeDeltaQFs >= 0 &&
                 lastCapturedWholeTimecodeDirection != .backwards
             {
                 if let tc = try? tcc
@@ -436,7 +436,7 @@ extension MIDI.MTC.Decoder: ReceivesMIDIEvents {
                 {
                     tcc = tc.components
                 }
-            } else if lastCapturedWholeTimecodeDeltaQFs < 0 &&
+            } else if unwrappedLastCapturedWholeTimecodeDeltaQFs < 0 &&
                         lastCapturedWholeTimecodeDirection == .backwards
             {
                 if let tc = try? tcc
