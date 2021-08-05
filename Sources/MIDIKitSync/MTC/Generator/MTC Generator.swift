@@ -20,7 +20,13 @@ extension MIDI.MTC {
         /// This property should only be inspected purely for developer informational or diagnostic purposes. For production code or any logic related to MTC, it should be ignored -- only the local `timecode.frameRate` property is used for automatic selection of MTC SMPTE frame rate and scaling of outgoing timecode accordingly.
         public var mtcFrameRate: MTCFrameRate {
             
-            encoder.mtcFrameRate
+            var getMTCFrameRate: MTCFrameRate!
+            
+            queue.sync {
+                getMTCFrameRate = encoder.mtcFrameRate
+            }
+            
+            return getMTCFrameRate
             
         }
         
@@ -30,19 +36,32 @@ extension MIDI.MTC {
         /// Property updated whenever outgoing MTC timecode changes.
         public var timecode: Timecode {
             
-            encoder.timecode
+            var getTimecode: Timecode!
+            
+            queue.sync {
+                getTimecode = encoder.timecode
+            }
+            
+            return getTimecode
             
         }
         
         public var localFrameRate: Timecode.FrameRate {
             
-            encoder.localFrameRate
+            var getFrameRate: Timecode.FrameRate!
+            
+            queue.sync {
+                getFrameRate = encoder.localFrameRate
+            }
+            
+            return getFrameRate
             
         }
         
         /// Behavior determining when MTC Full-Frame MIDI messages should be generated.
         ///
         /// `.ifDifferent` is recommended and suitable for most implementations.
+        @MIDI.AtomicAccess
         public var locateBehavior: MIDI.MTC.Encoder.FullFrameBehavior = .ifDifferent
         
         
