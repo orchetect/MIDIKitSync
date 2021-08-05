@@ -15,12 +15,12 @@ extension MIDI.MTC {
                 mtcFrameRate: MTCFrameRate)?
     ) -> Bool {
         
-        guard let lhs = lhs,
-              let rhs = rhs
+        guard let strongLHS = lhs,
+              let strongRHS = rhs
         else { return false }
         
-        let lhsComponents = lhs.mtcComponents
-        let rhsComponents = rhs.mtcComponents
+        let lhsComponents = strongLHS.mtcComponents
+        let rhsComponents = strongRHS.mtcComponents
         
         let componentsAreEqual =
             lhsComponents.h == rhsComponents.h &&
@@ -29,7 +29,7 @@ extension MIDI.MTC {
             lhsComponents.f == rhsComponents.f
         
         let mtcFrameRatesAreEqual =
-            lhs.mtcFrameRate == rhs.mtcFrameRate
+            strongLHS.mtcFrameRate == strongRHS.mtcFrameRate
         
         return componentsAreEqual && mtcFrameRatesAreEqual
         

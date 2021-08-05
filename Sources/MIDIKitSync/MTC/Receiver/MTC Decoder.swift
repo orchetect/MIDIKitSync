@@ -240,17 +240,17 @@ extension MIDI.MTC.Decoder: ReceivesMIDIEvents {
         
         // scale frames if local frame rate is set
         // scaling will return nil if frame rates are not compatible
-        if let localFrameRate = localFrameRate,
+        if let unwrappedLocalFrameRate = localFrameRate,
            let scaledFramesDouble = mtcFrameRate.scaledFrames(
             fromRawMTCFrames: tcc.f,
             quarterFrames: 0,
-            to: localFrameRate)
+            to: unwrappedLocalFrameRate)
         {
             let scaledFrameInt = Int(scaledFramesDouble)
             tcc.f = scaledFrameInt
             
             // since scaling succeeded, we know we are outputting the localFrameRate
-            outputFrameRate = localFrameRate
+            outputFrameRate = unwrappedLocalFrameRate
         } else {
             outputFrameRate = mtcFrameRate.directEquivalentFrameRate
         }
@@ -422,12 +422,12 @@ extension MIDI.MTC.Decoder: ReceivesMIDIEvents {
             
             var tcc = lastCapturedWholeTimecode
             
-            guard let lastCapturedWholeTimecodeDeltaQFs = lastCapturedWholeTimecodeDeltaQFs else {
+            guard let unwrappedLastCapturedWholeTimecodeDeltaQFs = lastCapturedWholeTimecodeDeltaQFs else {
                 preconditionFailure("lastCapturedWholeTimecodeDeltaQFs should not be nil.")
             }
             
             // perform 2-frame offsets depending on direction
-            if lastCapturedWholeTimecodeDeltaQFs >= 0 &&
+            if unwrappedLastCapturedWholeTimecodeDeltaQFs >= 0 &&
                 lastCapturedWholeTimecodeDirection != .backwards
             {
                 if let tc = try? tcc
@@ -436,7 +436,7 @@ extension MIDI.MTC.Decoder: ReceivesMIDIEvents {
                 {
                     tcc = tc.components
                 }
-            } else if lastCapturedWholeTimecodeDeltaQFs < 0 &&
+            } else if unwrappedLastCapturedWholeTimecodeDeltaQFs < 0 &&
                         lastCapturedWholeTimecodeDirection == .backwards
             {
                 if let tc = try? tcc
@@ -452,17 +452,17 @@ extension MIDI.MTC.Decoder: ReceivesMIDIEvents {
             
             // scale or interpolate based on if local frame rate is set
             // scaling will return nil if frame rates are not compatible
-            if let localFrameRate = localFrameRate,
+            if let unwrappedLocalFrameRate = localFrameRate,
                let scaledFramesDouble = mtcFrameRate.scaledFrames(
                 fromRawMTCFrames: tcc.f,
                 quarterFrames: quarterFrameReceived,
-                to: localFrameRate)
+                to: unwrappedLocalFrameRate)
             {
                 let scaledFramesInt = Int(scaledFramesDouble)
                 tcc.f = scaledFramesInt
                 
                 // since scaling succeeded, we know we are outputting the localFrameRate
-                outputFrameRate = localFrameRate
+                outputFrameRate = unwrappedLocalFrameRate
             } else {
                 // use raw MTC frames and interpolate to produce sequential frame numbers
                 
