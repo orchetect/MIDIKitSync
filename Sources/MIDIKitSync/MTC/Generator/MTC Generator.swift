@@ -24,6 +24,7 @@ extension MIDI.MTC {
             
         }
         
+        @MIDI.AtomicAccess
         public private(set) var state: State = .idle
         
         /// Property updated whenever outgoing MTC timecode changes.
@@ -72,25 +73,35 @@ extension MIDI.MTC {
             queue = DispatchQueue(label: "midikit.mtcgenerator.\(name)",
                                   qos: .userInteractive)
             
+            // timer
+            
             timer = MIDI.SafeDispatchTimer(rate: .seconds(1.0), // default, will be changed later
                                            queue: queue,
                                            eventHandler: { })
             
             timer.setEventHandler { [weak self] in
                 
-                self?.timerFired()
+                guard let self = self else { return }
+                
+                self.timerFired()
                 
             }
             
             setTimerRate(from: timecode.frameRate)
             
-            // encoder setup
-            
-            encoder = Encoder()
-            
-            encoder.midiOutHandler = { [weak self] midiEvents in
+            queue.sync {
                 
-                self?.midiOut(midiEvents)
+                // encoder setup
+                
+                encoder = Encoder()
+                
+                encoder.midiOutHandler = { [weak self] midiEvents in
+                    
+                    guard let self = self else { return }
+                    
+                    self.midiOut(midiEvents)
+                    
+                }
                 
             }
             
@@ -162,8 +173,12 @@ extension MIDI.MTC {
         /// Sends a MTC full-frame message.
         public func locate(to timecode: Timecode) {
             
-            encoder.locate(to: timecode, transmitFullFrame: locateBehavior)
-            setTimerRate(from: timecode.frameRate)
+            queue.sync {
+                
+                encoder.locate(to: timecode, transmitFullFrame: locateBehavior)
+                setTimerRate(from: timecode.frameRate)
+                
+            }
             
         }
         
@@ -171,17 +186,25 @@ extension MIDI.MTC {
         /// Sends a MTC full-frame message.
         public func locate(to components: Timecode.Components) {
             
-            encoder.locate(to: components, transmitFullFrame: locateBehavior)
-            setTimerRate(from: timecode.frameRate)
+            queue.sync {
+                
+                encoder.locate(to: components, transmitFullFrame: locateBehavior)
+                setTimerRate(from: timecode.frameRate)
+                
+            }
             
         }
         
         /// Starts generating MTC continuous playback MIDI message stream events from the current time position at the current local frame rate.
         public func start() {
             
-            state = .generating
-            
-            timer.restart()
+            queue.sync {
+                
+                state = .generating
+                
+                timer.restart()
+                
+            }
             
         }
         
@@ -209,13 +232,17 @@ extension MIDI.MTC {
         public func start(at components: Timecode.Components,
                           frameRate: Timecode.FrameRate) {
             
-            if state == .generating {
-                timer.stop()
+            queue.sync {
+                
+                if state == .generating {
+                    timer.stop()
+                }
+                
+                encoder.locate(to: components,
+                               frameRate: frameRate,
+                               transmitFullFrame: .always)
+                
             }
-            
-            encoder.locate(to: components,
-                           frameRate: frameRate,
-                           transmitFullFrame: .always)
             
             start()
             
@@ -244,9 +271,13 @@ extension MIDI.MTC {
         /// Stops generating MTC continuous playback MIDI message stream events.
         public func stop() {
             
-            state = .idle
-            
-            timer.stop()
+            queue.sync {
+                
+                state = .idle
+                
+                timer.stop()
+                
+            }
             
         }
         
