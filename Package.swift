@@ -19,8 +19,8 @@ let package = Package(
     ],
 
     dependencies: [
-        .package(url: "https://github.com/orchetect/MIDIKit", .upToNextMinor(from: "0.1.8")),
-        .package(url: "https://github.com/orchetect/TimecodeKit", from: "1.2.3")
+        .package(url: "https://github.com/orchetect/MIDIKit", .upToNextMinor(from: "0.1.11")),
+        .package(url: "https://github.com/orchetect/TimecodeKit", from: "1.2.5")
     ],
 
     targets: [
