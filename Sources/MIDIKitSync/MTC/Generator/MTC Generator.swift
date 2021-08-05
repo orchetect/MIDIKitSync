@@ -80,7 +80,9 @@ extension MIDI.MTC {
             
             timer.setEventHandler { [weak self] in
                 
-                self?.timerFired()
+                guard let self = self else { return }
+                
+                self.timerFired()
                 
             }
             
@@ -92,7 +94,9 @@ extension MIDI.MTC {
             
             encoder.midiOutHandler = { [weak self] midiEvents in
                 
-                self?.midiOut(midiEvents)
+                guard let self = self else { return }
+                
+                self.midiOut(midiEvents)
                 
             }
             

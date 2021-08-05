@@ -123,7 +123,7 @@ extension MIDI.MTC {
             
             // queue
             
-            queue = DispatchQueue(label: "midikit.mtcreceiver.\(name)",
+            queue = DispatchQueue(label: (Bundle.main.bundleIdentifier ?? "midikit") + ".mtcreceiver." + name,
                                   qos: .userInteractive)
             
             // set up decoder reset timer
@@ -139,8 +139,10 @@ extension MIDI.MTC {
             
             timer.setEventHandler { [weak self] in
                 
-                self?.queue.async {
-                    self?.timerFired()
+                guard let self = self else { return }
+                
+                self.queue.async {
+                    self.timerFired()
                 }
                 
             }
