@@ -3,6 +3,8 @@
 //  MIDIKitSync • https://github.com/orchetect/MIDIKitSync
 //
 
+import MIDIKit
+
 extension MIDI.MTC {
     
     public enum MessageType {

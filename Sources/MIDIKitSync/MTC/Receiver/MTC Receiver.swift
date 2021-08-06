@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import MIDIKit
 import TimecodeKit
 
 // MARK: - Receiver
@@ -235,7 +236,7 @@ extension MIDI.MTC {
                          at: decoder.localFrameRate ?? ._30)
                 .realTimeValue
             
-            let freewheelTimeout = timespec(floatSeconds: dropOutFramesDuration)
+            let freewheelTimeout = timespec.newInstance(floatSeconds: dropOutFramesDuration)
             
             // if >20ms window of time since last quarter frame, assume MTC message stream has been stopped/interrupted or being received at a speed less than realtime (ie: when Pro Tools plays back at half-speed) and reset our internal tracker
             if clockDiff.isGreater(than: continuousQFTimeout)

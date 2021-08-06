@@ -55,15 +55,17 @@ import Darwin
 extension timespec {
     
     /// Convenience constructor from floating point seconds value
-    @inlinable internal init<T: BinaryFloatingPoint>(floatSeconds bfp: T) {
+    @inlinable internal static func newInstance<T: BinaryFloatingPoint>(floatSeconds bfp: T) -> Self {
         
-        self.init()
+        var newTimespec = timespec()
         
         let intVal = Int(bfp * 1_000_000_000)
         
-        tv_nsec = intVal % 1_000_000_000
+        newTimespec.tv_nsec = intVal % 1_000_000_000
         
-        tv_sec = intVal / 1_000_000_000
+        newTimespec.tv_sec = intVal / 1_000_000_000
+        
+        return newTimespec
         
     }
     

@@ -23,6 +23,7 @@
  
  */
 
+import MIDIKit
 import TimecodeKit
 @_implementationOnly import SwiftRadix
 
