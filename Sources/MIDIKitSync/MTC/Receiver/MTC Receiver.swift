@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import OTCore // <-- must be here or build may fail
 import MIDIKit
 import TimecodeKit
 
