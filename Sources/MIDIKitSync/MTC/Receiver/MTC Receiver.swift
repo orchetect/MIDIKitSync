@@ -4,7 +4,7 @@
 //
 
 import Foundation
-import OTCore // <-- must be here or build may fail
+@_implementationOnly import OTCore // <-- must be here or build may fail
 import MIDIKit
 import TimecodeKit
 
@@ -87,7 +87,8 @@ extension MIDI.MTC {
         }
         
         /// Behavior governing how locking occurs prior to chase
-        @MIDI.AtomicAccess public var syncPolicy: SyncPolicy = SyncPolicy()
+        @MIDI.AtomicAccess
+        public var syncPolicy: SyncPolicy = SyncPolicy()
         
         
         // MARK: - Stored closures
@@ -122,7 +123,7 @@ extension MIDI.MTC {
                                _ event: MessageType,
                                _ direction: Direction,
                                _ displayNeedsUpdate: Bool) -> Void)? = nil,
-            stateChanged: ((_ state: Receiver.State) -> Void)? = nil
+            stateChanged: ((_ state: State) -> Void)? = nil
         ) {
             
             // handle init arguments
@@ -214,9 +215,9 @@ extension MIDI.MTC {
             
             // this will be called by the timer which operates on our internal queue, so we don't need to wrap this in queue.async { }
             
-            let timeNow = otc_clock_gettime_monotonic_raw()
+            let timeNow = clock_gettime_monotonic_raw()
             
-            let clockDiff = timeNow.subtracting(timeLastQuarterFrameReceived)
+            let clockDiff = timeNow - timeLastQuarterFrameReceived
             
             // increment state from preSync to chasing once requisite frames have elapsed
             
@@ -237,18 +238,18 @@ extension MIDI.MTC {
                          at: decoder.localFrameRate ?? ._30)
                 .realTimeValue
             
-            let freewheelTimeout = timespec.newInstance(floatSeconds: dropOutFramesDuration)
+            let freewheelTimeout = timespec(dropOutFramesDuration)
             
             // if >20ms window of time since last quarter frame, assume MTC message stream has been stopped/interrupted or being received at a speed less than realtime (ie: when Pro Tools plays back at half-speed) and reset our internal tracker
-            if clockDiff.isGreater(than: continuousQFTimeout)
-                && clockDiff.isLess(than: freewheelTimeout)
+            if clockDiff > continuousQFTimeout
+                && clockDiff < freewheelTimeout
             {
                 
                 decoder.resetQFBuffer()
                 
                 state = .freewheeling
                 
-            } else if clockDiff.isGreater(than: freewheelTimeout) {
+            } else if clockDiff > freewheelTimeout {
                 
                 state = .idle
                 timer.stop()
@@ -312,7 +313,7 @@ extension MIDI.MTC.Receiver {
             }
             
             // log quarter-frame timestamp
-            let timeNow = otc_clock_gettime_monotonic_raw()
+            let timeNow = clock_gettime_monotonic_raw()
             timeLastQuarterFrameReceived = timeNow
             
             // update state
