@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import MIDIKit
 import TimecodeKit
 
 extension MIDI.MTC {

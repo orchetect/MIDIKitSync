@@ -3,6 +3,7 @@
 //  MIDIKitSync • https://github.com/orchetect/MIDIKitSync
 //
 
+import MIDIKit
 import TimecodeKit
 
 extension MIDI.MTC.Receiver {

@@ -3,6 +3,8 @@
 //  MIDIKitSync • https://github.com/orchetect/MIDIKitSync
 //
 
+import MIDIKit
+
 // Protocol information:
 // https://en.wikipedia.org/wiki/MIDI_timecode
 //

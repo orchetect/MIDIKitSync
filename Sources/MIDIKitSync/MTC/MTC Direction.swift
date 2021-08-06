@@ -3,6 +3,8 @@
 //  MIDIKitSync • https://github.com/orchetect/MIDIKitSync
 //
 
+import MIDIKit
+
 extension MIDI.MTC {
     
     /// Describes the timeline direction of MTC events.

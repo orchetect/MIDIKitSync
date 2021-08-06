@@ -3,6 +3,8 @@
 //  MIDIKitSync • https://github.com/orchetect/MIDIKitSync
 //
 
+import MIDIKit
+
 extension MIDI.MTC.Encoder {
     
     /// Behavior determining when MTC Full-Frame MIDI messages should be generated.

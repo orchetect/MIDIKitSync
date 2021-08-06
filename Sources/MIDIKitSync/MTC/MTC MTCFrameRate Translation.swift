@@ -3,8 +3,8 @@
 //  MIDIKitSync • https://github.com/orchetect/MIDIKitSync
 //
 
+import MIDIKit
 import TimecodeKit
-
 
 // MARK: - Derived rates
 

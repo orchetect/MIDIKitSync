@@ -3,6 +3,8 @@
 //  MIDIKitSync • https://github.com/orchetect/MIDIKitSync
 //
 
+import MIDIKit
+
 // MARK: - State
 
 extension MIDI.MTC.Generator {
