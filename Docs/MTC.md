@@ -96,13 +96,13 @@ let tc = Timecode("01:02:17:05", at: ._24) // form a timecode @ 24fps
 mtcGen.locate(to: tc)
 ```
 
-To start and stop transmission of continuous quarter-frame messages, first ensure that the generator has located to an origin timecode position from which to start generating. Then call `start()` when playback starts at the start of the frame of that timecode, and `stop()` when playback stops.
+To start and stop transmission of continuous quarter-frame messages, first ensure that the generator has located to an origin timecode position from which to start generating. Then call `start(...)` when playback starts, and `stop()` when playback stops.
 
 ```swift
 // start MTC sync generation
 let tc = Timecode("01:05:20:15", at: ._24)
 // transport starts playback at exactly 1:05:20:15 (start of the frame)
-mtcGen.start(at: tc)
+mtcGen.start(now: tc)
 // ...
 // transport stopped
 mtcGen.stop()

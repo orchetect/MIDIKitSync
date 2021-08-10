@@ -37,13 +37,11 @@ final class StressTests: XCTestCase {
             // public methods
             mtcGen.locate(to: Timecode(at: ._24))
             mtcGen.locate(to: TCC())
-            mtcGen.start()
+            mtcGen.start(now: Timecode(at: ._24))
             mtcGen.stop()
-            mtcGen.start(at: Timecode(at: ._24))
+            mtcGen.start(now: TCC(), frameRate: ._24, base: ._100SubFrames)
             mtcGen.stop()
-            mtcGen.start(at: TCC(), frameRate: ._24)
-            mtcGen.stop()
-            mtcGen.start(at: 0.0, frameRate: ._24)
+            mtcGen.start(now: 0.0, frameRate: ._24)
             mtcGen.stop()
         }
         
