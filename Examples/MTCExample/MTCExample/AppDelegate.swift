@@ -56,9 +56,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         mtcGenWindow = NSWindow(
             contentRect: NSRect(x: (scrW / 2) - 400 - 20,
-                                y: (scrH / 2) - 200,
+                                y: (scrH / 2) - 225,
                                 width: 400,
-                                height: 375),
+                                height: 450),
             styleMask: [.titled, .resizable, .fullSizeContentView],
             backing: .buffered, defer: false
         )

@@ -34,7 +34,7 @@ struct MTCGenContentView: View {
     
     @State var mtcGenState = false
     
-    @State var generatorTC: String = ""
+    @State var generatorTC: Timecode = .init(at: ._24)
     
     // MARK: - Internal State
     
@@ -46,26 +46,103 @@ struct MTCGenContentView: View {
         
         VStack(alignment: .center, spacing: 8) {
             
-            Text(generatorTC)
+            Text(generatorTC.stringValue)
                 .font(.system(size: 48, weight: .regular, design: .monospaced))
                 .frame(maxWidth: .infinity)
             
             Spacer()
-                .frame(height: 20)
+                .frame(height: 15)
             
-            Button("Locate to " + TCC(h: 1, m: 00, s: 00, f: 00).toTimecode(rawValuesAt: localFrameRate).stringValue) {
-                locate(to: TCC(h: 1, m: 00, s: 00, f: 00))
-            }
-            .disabled(mtcGenState)
-            
-            HStack(alignment: .center, spacing: 8) {
-                Button("Start") {
+            VStack {
+                
+                Button("Locate to "
+                        + TCC(h: 1, m: 00, s: 00, f: 00, sf: 00)
+                        .toTimecode(rawValuesAt: localFrameRate,
+                                    base: ._100SubFrames,
+                                    format: [.showSubFrames])
+                        .stringValue
+                ) {
+                    locate(to: TCC(h: 1, m: 00, s: 00, f: 00, sf: 00))
+                }
+                .disabled(mtcGenState)
+                
+                Button("Start at Current Timecode") {
                     mtcGenState = true
                     if mtcGen.localFrameRate != localFrameRate {
                         // update generator frame rate by triggering a locate
                         locate()
                     }
-                    mtcGen.start()
+                    mtcGen.start(now: generatorTC)
+                }
+                .disabled(mtcGenState)
+                
+                Button("Start at "
+                        + TCC(h: 1, m: 00, s: 00, f: 00, sf: 35)
+                        .toTimecode(rawValuesAt: localFrameRate,
+                                    base: ._100SubFrames,
+                                    format: [.showSubFrames])
+                        .stringValue
+                       + " (as Timecode)"
+                ) {
+                    mtcGenState = true
+                    if mtcGen.localFrameRate != localFrameRate {
+                        // update generator frame rate by triggering a locate
+                        locate()
+                    }
+                    
+                    let startTC = TCC(h: 1, m: 00, s: 00, f: 00, sf: 35)
+                        .toTimecode(rawValuesAt: localFrameRate,
+                                    base: ._100SubFrames)
+                    
+                    mtcGen.start(now: startTC)
+                }
+                .disabled(mtcGenState)
+                
+                Button("Start at "
+                        + TCC(h: 1, m: 00, s: 00, f: 00, sf: 35)
+                        .toTimecode(rawValuesAt: localFrameRate,
+                                    base: ._100SubFrames,
+                                    format: [.showSubFrames])
+                        .stringValue
+                        + " (as Timecode Components)"
+                ) {
+                    mtcGenState = true
+                    if mtcGen.localFrameRate != localFrameRate {
+                        // update generator frame rate by triggering a locate
+                        locate()
+                    }
+                    
+                    let startTC = TCC(h: 1, m: 00, s: 00, f: 00, sf: 35)
+                        .toTimecode(rawValuesAt: localFrameRate,
+                                    base: ._100SubFrames)
+                    
+                    mtcGen.start(now: startTC.components,
+                                 frameRate: startTC.frameRate,
+                                 base: startTC.subFramesBase)
+                }
+                .disabled(mtcGenState)
+                
+                Button("Start at "
+                        + TCC(h: 1, m: 00, s: 00, f: 00, sf: 35)
+                        .toTimecode(rawValuesAt: localFrameRate,
+                                    base: ._100SubFrames,
+                                    format: [.showSubFrames])
+                        .stringValue
+                       + " (as TimeInterval)"
+                ) {
+                    mtcGenState = true
+                    if mtcGen.localFrameRate != localFrameRate {
+                        // update generator frame rate by triggering a locate
+                        locate()
+                    }
+                    
+                    let startRealTimeSeconds = TCC(h: 1, m: 00, s: 00, f: 00, sf: 35)
+                        .toTimecode(rawValuesAt: localFrameRate,
+                                    base: ._100SubFrames)
+                        .realTimeValue
+                    
+                    mtcGen.start(now: startRealTimeSeconds,
+                                 frameRate: localFrameRate)
                 }
                 .disabled(mtcGenState)
                 
@@ -74,10 +151,11 @@ struct MTCGenContentView: View {
                     mtcGen.stop()
                 }
                 .disabled(!mtcGenState)
+                
             }
             
             Spacer()
-                .frame(height: 20)
+                .frame(height: 15)
             
             Picker("Local Frame Rate", selection: $localFrameRate) {
                 ForEach(Timecode.FrameRate.allCases) { fRate in
@@ -99,7 +177,7 @@ struct MTCGenContentView: View {
             Text("will be transmit as \(localFrameRate.mtcFrameRate.stringValue)")
             
             Spacer()
-                .frame(height: 20)
+                .frame(height: 15)
             
             Picker("Locate Behavior", selection: $locateBehavior) {
                 ForEach(MIDI.MTC.Encoder.FullFrameBehavior.allCases, id: \.self) { locateBehaviorType in
@@ -119,7 +197,9 @@ struct MTCGenContentView: View {
             }
             
         }
-        .frame(minWidth: 400, maxWidth: .infinity, minHeight: 300, maxHeight: .infinity, alignment: .center)
+        .frame(minWidth: 400, maxWidth: .infinity,
+               minHeight: 300, maxHeight: .infinity,
+               alignment: .center)
         .onAppear {
             
             // create MTC generator MIDI endpoint
@@ -142,9 +222,11 @@ struct MTCGenContentView: View {
                         .managedOutputs[midiSources.MTCGen.tag]?
                         .send(events: midiEvents)
                     
+                    // NOTE: normally you would not want to run any UI updates from this handler; this is only being done here for sake of demonstration purposes
+                    
                     DispatchQueue.main.async {
                         let tc = mtcGen.timecode
-                        generatorTC = tc.stringValue
+                        generatorTC = tc
                         
                         if tc.seconds != lastSeconds {
                             if mtcGenState { playClickA() }
@@ -163,10 +245,12 @@ struct MTCGenContentView: View {
     }
     
     /// Locate to a timecode, or 00:00:00:00 by default.
-    func locate(to components: Timecode.Components = TCC(h: 00, m: 00, s: 00, f: 00)) {
+    func locate(
+        to components: Timecode.Components = TCC(h: 00, m: 00, s: 00, f: 00)
+    ) {
         
         let tc = components.toTimecode(rawValuesAt: localFrameRate)
-        generatorTC = tc.stringValue
+        generatorTC = tc
         mtcGen.locate(to: tc)
         
     }
