@@ -103,7 +103,7 @@ extension MIDI.MTC {
         // MARK: - methods
         
         /// Locates to a new timecode.
-        /// Subframes will be stripped if != 0.
+        /// Subframes will be stripped if != 0 since MTC full-frame message resolution is 1 frame.
         ///
         /// - Parameters:
         ///   - timecode: Timecode; frame rate is derived as well.
@@ -118,7 +118,7 @@ extension MIDI.MTC {
         }
         
         /// Locates to a new timecode.
-        /// Subframes will be stripped if != 0.
+        /// Subframes will be stripped if != 0 since MTC full-frame message resolution is 1 frame.
         ///
         /// - Parameters:
         ///   - components: Timecode components
