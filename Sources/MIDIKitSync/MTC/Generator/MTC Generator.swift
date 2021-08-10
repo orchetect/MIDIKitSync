@@ -235,14 +235,17 @@ extension MIDI.MTC {
         /// Call `stop()` to stop generating events.
         public func start(now timecode: Timecode) {
             
-            // if subframes == 0, no scheduling is required
-            
-            if timecode.subFrames == 0 {
+            queue.sync {
                 
-                locateAndStart(now: timecode.components,
-                               frameRate: timecode.frameRate)
+                shouldStart = true
                 
-                return
+                // if subframes == 0, no scheduling is required
+                
+                if timecode.subFrames == 0 {
+                    locateAndStart(now: timecode.components,
+                                   frameRate: timecode.frameRate)
+                    return
+                }
                 
             }
             
@@ -265,6 +268,10 @@ extension MIDI.MTC {
         public func start(now components: Timecode.Components,
                           frameRate: Timecode.FrameRate,
                           base: Timecode.SubFramesBase) {
+            
+            queue.sync {
+                shouldStart = true
+            }
             
             let tc = Timecode(rawValues: components,
                               at: frameRate,
@@ -291,8 +298,12 @@ extension MIDI.MTC {
             
             let nsInDispatchTime = DispatchTime.now().uptimeNanoseconds
             
+            queue.sync {
+                shouldStart = true
+            }
+            
             // convert real time to timecode at the given frame rate
-            guard let tc = try? Timecode(
+            guard let inRTtoTimecode = try? Timecode(
                 realTimeValue: realTime,
                 at: frameRate,
                 limit: ._24hours,
@@ -301,37 +312,21 @@ extension MIDI.MTC {
             
             // if subframes == 0, no scheduling is required
             
-            if tc.subFrames == 0 {
-                locateAndStart(now: tc.components,
-                               frameRate: tc.frameRate)
-                return
-            }
-            
-            // if the resulting timecode is near enough to the realTime
-            // supplied, then no scheduling is required and we can just start
-            
-            let secsOfOneFrame = TCC(f: 1)
-                .toTimecode(rawValuesAt: frameRate)
-                .realTimeValue
-            
-            // arbitrary: use duration of a subframe at 100 subframes per frame
-            // to determine if realTime is near enough to the start of a frame
-            let secsAcceptableMargin = secsOfOneFrame / 100
-            
-            let secsDiffBetweenInputAndTimecode = realTime - tc.realTimeValue
-            
-            if secsDiffBetweenInputAndTimecode < secsAcceptableMargin {
-                locateAndStart(now: tc.components,
-                               frameRate: tc.frameRate)
+            if inRTtoTimecode.subFrames == 0 {
+                locateAndStart(now: inRTtoTimecode.components,
+                               frameRate: inRTtoTimecode.frameRate)
                 return
             }
             
             // otherwise, we have to schedule MTC start for the near future
             // (the exact start of the next frame)
             
-            let tcAdvancedByOneFrame = tc.adding(wrapping: TCC(f: 1))
+            // truncate subframes and advance 1 frame
+            var tcAtNextEvenFrame = inRTtoTimecode
+            tcAtNextEvenFrame.subFrames = 0
+            tcAtNextEvenFrame.add(wrapping: TCC(f: 1))
             
-            let secsToStartOfNextFrame = secsOfOneFrame - secsDiffBetweenInputAndTimecode
+            let secsToStartOfNextFrame = tcAtNextEvenFrame.realTimeValue - realTime
             
             let nsecsToStartOfNextFrame = UInt64(secsToStartOfNextFrame * 1_000_000_000)
             
@@ -342,33 +337,30 @@ extension MIDI.MTC {
             {
                 guard self.shouldStart else { return }
                 
-                self.locateAndStart(now: tcAdvancedByOneFrame.components,
-                                    frameRate: tcAdvancedByOneFrame.frameRate)
+                self.locateAndStart(now: tcAtNextEvenFrame.components,
+                                    frameRate: tcAtNextEvenFrame.frameRate)
             }
             
         }
         
         /// Internal: called from all other start(...) methods when they are finally ready to initiate the start of MTC generation.
         /// - Note: This method assumes subframes == 0.
+        /// - Note: This must be called on `self.queue`.
         internal func locateAndStart(now components: Timecode.Components,
                                      frameRate: Timecode.FrameRate) {
             
-            queue.sync {
-                
-                encoder.locate(to: components,
-                               frameRate: frameRate,
-                               transmitFullFrame: .never)
-                
-                if state == .generating {
-                    timer.stop()
-                }
-                
-                state = .generating
-                
-                setTimerRate(from: encoder.localFrameRate)
-                timer.restart()
-                
+            encoder.locate(to: components,
+                           frameRate: frameRate,
+                           transmitFullFrame: .never)
+            
+            if state == .generating {
+                timer.stop()
             }
+            
+            state = .generating
+            
+            setTimerRate(from: encoder.localFrameRate)
+            timer.restart()
             
         }
         

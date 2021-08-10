@@ -72,6 +72,7 @@ struct MTCGenContentView: View {
                         // update generator frame rate by triggering a locate
                         locate()
                     }
+                    Log.debug("Starting at \(generatorTC.stringValue)")
                     mtcGen.start(now: generatorTC)
                 }
                 .disabled(mtcGenState)
