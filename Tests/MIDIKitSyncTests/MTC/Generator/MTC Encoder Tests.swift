@@ -812,7 +812,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 0, m: 00, s: 00, f: 00))
-        XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().event.rawBytes,
+        XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().event.midi1RawBytes,
                        [
                         0xF0, 0x7F, 0x7F, 0x01, 0x01,
                         0b0000_0000, // 0rrh_hhhh
@@ -827,7 +827,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 0, m: 00, s: 00, f: 00))
-        XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().event.rawBytes,
+        XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().event.midi1RawBytes,
                        [
                         0xF0, 0x7F, 0x7F, 0x01, 0x01,
                         0b0010_0000, // 0rrh_hhhh
@@ -842,7 +842,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 1, m: 02, s: 03, f: 04))
-        XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().event.rawBytes,
+        XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().event.midi1RawBytes,
                        [
                         0xF0, 0x7F, 0x7F, 0x01, 0x01,
                         0b0100_0001, // 0rrh_hhhh
@@ -856,7 +856,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 1, m: 02, s: 03, f: 05))
-        XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().event.rawBytes,
+        XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().event.midi1RawBytes,
                        [
                         0xF0, 0x7F, 0x7F, 0x01, 0x01,
                         0b0100_0001, // 0rrh_hhhh
@@ -871,7 +871,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 2, m: 04, s: 06, f: 08))
-        XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().event.rawBytes,
+        XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().event.midi1RawBytes,
                        [
                         0xF0, 0x7F, 0x7F, 0x01, 0x01,
                         0b0110_0010, // 0rrh_hhhh
@@ -890,7 +890,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 2, m: 04, s: 06, f: 04))
-        XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().event.rawBytes,
+        XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().event.midi1RawBytes,
                        [
                         0xF0, 0x7F, 0x7F, 0x01, 0x01,
                         0b0000_0010, // 0rrh_hhhh
@@ -905,7 +905,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 2, m: 04, s: 06, f: 04))
-        XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().event.rawBytes,
+        XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().event.midi1RawBytes,
                        [
                         0xF0, 0x7F, 0x7F, 0x01, 0x01,
                         0b0000_0010, // 0rrh_hhhh
@@ -920,7 +920,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 2, m: 04, s: 06, f: 05))
-        XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().event.rawBytes,
+        XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().event.midi1RawBytes,
                        [
                         0xF0, 0x7F, 0x7F, 0x01, 0x01,
                         0b0000_0010, // 0rrh_hhhh
@@ -949,7 +949,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 0, m: 00, s: 00, f: 00))
-        XCTAssertEqual(_midiEvents?.first?.rawBytes,
+        XCTAssertEqual(_midiEvents?.first?.midi1RawBytes,
                        [
                         0xF0, 0x7F, 0x7F, 0x01, 0x01,
                         0b0000_0000, // 0rrh_hhhh
@@ -964,7 +964,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 0, m: 00, s: 00, f: 00))
-        XCTAssertEqual(_midiEvents?.first?.rawBytes,
+        XCTAssertEqual(_midiEvents?.first?.midi1RawBytes,
                        [
                         0xF0, 0x7F, 0x7F, 0x01, 0x01,
                         0b0010_0000, // 0rrh_hhhh
@@ -979,7 +979,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 1, m: 02, s: 03, f: 04))
-        XCTAssertEqual(_midiEvents?.first?.rawBytes,
+        XCTAssertEqual(_midiEvents?.first?.midi1RawBytes,
                        [
                         0xF0, 0x7F, 0x7F, 0x01, 0x01,
                         0b0100_0001, // 0rrh_hhhh
@@ -993,7 +993,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 1, m: 02, s: 03, f: 05))
-        XCTAssertEqual(_midiEvents?.first?.rawBytes,
+        XCTAssertEqual(_midiEvents?.first?.midi1RawBytes,
                        [
                         0xF0, 0x7F, 0x7F, 0x01, 0x01,
                         0b0100_0001, // 0rrh_hhhh
@@ -1008,7 +1008,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 2, m: 04, s: 06, f: 08))
-        XCTAssertEqual(_midiEvents?.first?.rawBytes,
+        XCTAssertEqual(_midiEvents?.first?.midi1RawBytes,
                        [
                         0xF0, 0x7F, 0x7F, 0x01, 0x01,
                         0b0110_0010, // 0rrh_hhhh
@@ -1027,7 +1027,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 2, m: 04, s: 06, f: 04))
-        XCTAssertEqual(_midiEvents?.first?.rawBytes,
+        XCTAssertEqual(_midiEvents?.first?.midi1RawBytes,
                        [
                         0xF0, 0x7F, 0x7F, 0x01, 0x01,
                         0b0000_0010, // 0rrh_hhhh
@@ -1042,7 +1042,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 2, m: 04, s: 06, f: 04))
-        XCTAssertEqual(_midiEvents?.first?.rawBytes,
+        XCTAssertEqual(_midiEvents?.first?.midi1RawBytes,
                        [
                         0xF0, 0x7F, 0x7F, 0x01, 0x01,
                         0b0000_0010, // 0rrh_hhhh
@@ -1057,7 +1057,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         
         XCTAssertEqual(mtcEnc.generateFullFrameMIDIMessage().components,
                        TCC(h: 2, m: 04, s: 06, f: 05))
-        XCTAssertEqual(_midiEvents?.first?.rawBytes,
+        XCTAssertEqual(_midiEvents?.first?.midi1RawBytes,
                        [
                         0xF0, 0x7F, 0x7F, 0x01, 0x01,
                         0b0000_0010, // 0rrh_hhhh
@@ -1082,31 +1082,31 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
             mtcEnc.mtcComponents.f = 8
             
             mtcEnc.mtcQuarterFrame = 0
-            XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().rawBytes,
+            XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().midi1RawBytes,
                            [0xF1, 0b0000_1000])
             
             mtcEnc.mtcQuarterFrame = 1
-            XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().rawBytes,
+            XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().midi1RawBytes,
                            [0xF1, 0b0001_0000])
             
             mtcEnc.mtcQuarterFrame = 2
-            XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().rawBytes,
+            XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().midi1RawBytes,
                            [0xF1, 0b0010_0110])
             
             mtcEnc.mtcQuarterFrame = 3
-            XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().rawBytes,
+            XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().midi1RawBytes,
                            [0xF1, 0b0011_0000])
             
             mtcEnc.mtcQuarterFrame = 4
-            XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().rawBytes,
+            XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().midi1RawBytes,
                            [0xF1, 0b0100_0100])
             
             mtcEnc.mtcQuarterFrame = 5
-            XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().rawBytes,
+            XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().midi1RawBytes,
                            [0xF1, 0b0101_0000])
             
             mtcEnc.mtcQuarterFrame = 6
-            XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().rawBytes,
+            XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().midi1RawBytes,
                            [0xF1, 0b0110_0010])
             
             mtcEnc.mtcQuarterFrame = 7
@@ -1117,7 +1117,7 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
             case .mtc2997d: dataByte = 0b0111_0100
             case .mtc30:    dataByte = 0b0111_0110
             }
-            XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().rawBytes,
+            XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().midi1RawBytes,
                            [0xF1, dataByte])
             
         }
@@ -1129,35 +1129,35 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         mtcEnc.locate(to: TCC(h: 23, m: 59, s: 58, f: 28).toTimecode(rawValuesAt: ._30))
         
         mtcEnc.mtcQuarterFrame = 0
-        XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().rawBytes,
+        XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().midi1RawBytes,
                        [0xF1, 0b0000_1100])
         
         mtcEnc.mtcQuarterFrame = 1
-        XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().rawBytes,
+        XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().midi1RawBytes,
                        [0xF1, 0b0001_0001])
         
         mtcEnc.mtcQuarterFrame = 2
-        XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().rawBytes,
+        XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().midi1RawBytes,
                        [0xF1, 0b0010_1010])
         
         mtcEnc.mtcQuarterFrame = 3
-        XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().rawBytes,
+        XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().midi1RawBytes,
                        [0xF1, 0b0011_0011])
         
         mtcEnc.mtcQuarterFrame = 4
-        XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().rawBytes,
+        XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().midi1RawBytes,
                        [0xF1, 0b0100_1011])
         
         mtcEnc.mtcQuarterFrame = 5
-        XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().rawBytes,
+        XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().midi1RawBytes,
                        [0xF1, 0b0101_0011])
         
         mtcEnc.mtcQuarterFrame = 6
-        XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().rawBytes,
+        XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().midi1RawBytes,
                        [0xF1, 0b0110_0111])
         
         mtcEnc.mtcQuarterFrame = 7
-        XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().rawBytes,
+        XCTAssertEqual(mtcEnc.generateQuarterFrameMIDIMessage().midi1RawBytes,
                        [0xF1, 0b0111_0111])
         
     }

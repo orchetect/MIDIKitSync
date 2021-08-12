@@ -181,14 +181,15 @@ extension MIDI.MTC.Decoder: ReceivesMIDIEvents {
                              deviceID: let deviceID,
                              subID1: let subID1,
                              subID2: let subID2,
-                             data: let data):
+                             data: let data,
+                             group: _):
             processSysEx(universalType: universalType,
                          deviceID: deviceID,
                          subID1: subID1,
                          subID2: subID2,
                          data: data)
             
-        case .timecodeQuarterFrame(byte: let dataByte):
+        case .timecodeQuarterFrame(byte: let dataByte, group: _):
             processQF(dataByte: dataByte)
             
         default:
