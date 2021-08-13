@@ -230,7 +230,7 @@ struct MTCRecContentView: View {
         
         ZStack {
             Text({
-                // this is a stupid SwiftUI workaround, but it works fine for our purposes
+                // this is a stupid SwiftUI workaround because we can't use .onChange{} in Catalina and didSet{} is not reliable on a @State var, so works fine for our purposes
                 if mtcRec.localFrameRate != localFrameRate {
                     Log.default("Setting MTC receiver's local frame rate to",
                                 localFrameRate?.stringValue ?? "None")
