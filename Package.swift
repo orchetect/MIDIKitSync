@@ -7,7 +7,7 @@ let package = Package(
     name: "MIDIKitSync",
 
     platforms: [
-        .macOS(.v10_12), .iOS(.v10), // , .tvOS(.v14), .watchOS(.v7) - still in beta
+        .macOS(.v10_12), .iOS(.v10) // , .tvOS(.v14), .watchOS(.v7) - still in beta
     ],
 
     products: [
@@ -19,7 +19,7 @@ let package = Package(
     ],
 
     dependencies: [
-        .package(url: "https://github.com/orchetect/MIDIKit", .exact("0.1.15")),
+        .package(url: "https://github.com/orchetect/MIDIKit", from: "0.1.18"),
         .package(url: "https://github.com/orchetect/TimecodeKit", from: "1.2.6")
     ],
 
