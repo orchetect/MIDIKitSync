@@ -44,7 +44,7 @@ extension MIDI.MTC {
         }
         
         /// Last internal MTC SPMTE timecode components formed from outgoing MTC data.
-//        @MIDI.AtomicAccess
+        @MIDI.AtomicAccess
         public internal(set) var mtcComponents = Timecode.Components()
         
         internal func setMTCComponents(mtc newComponents: Timecode.Components) {
@@ -75,11 +75,11 @@ extension MIDI.MTC {
         // MARK: - Internal properties
         
         /// Last internal MTC quarter-frame formed. (0...7)
-//        @MIDI.AtomicAccess
+        @MIDI.AtomicAccess
         public internal(set) var mtcQuarterFrame: UInt8 = 0
         
         /// Internal: flag indicating whether the quarter-frame output stream has already started since the last `locate(to:)` (or since initializing the class if `locate(to:)` has not yet been called).
-//        @MIDI.AtomicAccess
+        @MIDI.AtomicAccess
         internal var mtcQuarterFrameStreamHasStartedSinceLastLocate = false
         
         /// Internal: track last full-frame message sent to the handler.
