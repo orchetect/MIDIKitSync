@@ -150,23 +150,23 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         
         // 24fps QFs starting at 02:03:04:04, locking at 02:03:04:06 + 2 MTC frame offset
         
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0000_0110)) // QF 0
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0000_0110)) // QF 0
         XCTWait(sec: 0.0103) // approx time between QFs @ 24fps
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0001_0000)) // QF 1
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0001_0000)) // QF 1
         XCTWait(sec: 0.0103) // approx time between QFs @ 24fps
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0010_0100)) // QF 2
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0010_0100)) // QF 2
         XCTWait(sec: 0.0103) // approx time between QFs @ 24fps
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0011_0000)) // QF 3
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0011_0000)) // QF 3
         XCTWait(sec: 0.0103) // approx time between QFs @ 24fps
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0100_0011)) // QF 4
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0100_0011)) // QF 4
         XCTWait(sec: 0.0103) // approx time between QFs @ 24fps
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0101_0000)) // QF 5
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0101_0000)) // QF 5
         XCTWait(sec: 0.0103) // approx time between QFs @ 24fps
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0110_0010)) // QF 6
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0110_0010)) // QF 6
         XCTWait(sec: 0.0103) // approx time between QFs @ 24fps
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0111_0000)) // QF 7
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0111_0000)) // QF 7
         XCTWait(sec: 0.0103) // approx time between QFs @ 24fps
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0000_1000)) // QF 0
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0000_1000)) // QF 0
         
         let waitTime = 0.005
         XCTWait(sec: waitTime)
@@ -285,55 +285,55 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         
         // 24fps QFs starting at 02:03:04:04, locking at 02:03:04:06 + 2 MTC frame offset
         
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0000_0110)) // QF 0
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0000_0110)) // QF 0
         XCTWait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(_timecode, nil)
         XCTAssertEqual(_direction, nil)
         
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0001_0000)) // QF 1
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0001_0000)) // QF 1
         XCTWait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(_timecode, nil)
         XCTAssertEqual(_direction, nil)
         
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0010_0100)) // QF 2
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0010_0100)) // QF 2
         XCTWait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(_timecode, nil)
         XCTAssertEqual(_direction, nil)
         
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0011_0000)) // QF 3
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0011_0000)) // QF 3
         XCTWait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(_timecode, nil)
         XCTAssertEqual(_direction, nil)
         
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0100_0011)) // QF 4
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0100_0011)) // QF 4
         XCTWait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(_timecode, nil)
         XCTAssertEqual(_direction, nil)
         
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0101_0000)) // QF 5
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0101_0000)) // QF 5
         XCTWait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(_timecode, nil)
         XCTAssertEqual(_direction, nil)
         
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0110_0010)) // QF 6
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0110_0010)) // QF 6
         XCTWait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(_timecode, nil)
         XCTAssertEqual(_direction, nil)
         
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0111_0000)) // QF 7
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0111_0000)) // QF 7
         XCTWait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(_timecode, nil)
         XCTAssertEqual(_direction, nil)
         
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0000_1000)) // QF 0
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0000_1000)) // QF 0
         XCTWait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 8).toTimecode(rawValuesAt: ._24)) // new TC
@@ -342,7 +342,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         XCTAssertEqual(_timecode?.frameRate, ._24)
         XCTAssertEqual(_direction, .forwards)
         
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0001_0000)) // QF 1
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0001_0000)) // QF 1
         XCTWait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 8).toTimecode(rawValuesAt: ._24)) // unchanged
@@ -351,7 +351,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         XCTAssertEqual(_timecode?.frameRate, ._24)
         XCTAssertEqual(_direction, .forwards)
         
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0010_0100)) // QF 2
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0010_0100)) // QF 2
         XCTWait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 8).toTimecode(rawValuesAt: ._24)) // unchanged
@@ -360,7 +360,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         XCTAssertEqual(_timecode?.frameRate, ._24)
         XCTAssertEqual(_direction, .forwards)
         
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0011_0000)) // QF 3
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0011_0000)) // QF 3
         XCTWait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 8).toTimecode(rawValuesAt: ._24)) // unchanged
@@ -369,7 +369,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         XCTAssertEqual(_timecode?.frameRate, ._24)
         XCTAssertEqual(_direction, .forwards)
         
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0100_0011)) // QF 4
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0100_0011)) // QF 4
         XCTWait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 9).toTimecode(rawValuesAt: ._24)) // new TC
@@ -378,7 +378,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         XCTAssertEqual(_timecode?.frameRate, ._24)
         XCTAssertEqual(_direction, .forwards)
         
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0101_0000)) // QF 5
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0101_0000)) // QF 5
         XCTWait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 9).toTimecode(rawValuesAt: ._24)) // unchanged
@@ -387,7 +387,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         XCTAssertEqual(_timecode?.frameRate, ._24)
         XCTAssertEqual(_direction, .forwards)
         
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0110_0010)) // QF 6
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0110_0010)) // QF 6
         XCTWait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 9).toTimecode(rawValuesAt: ._24)) // unchanged
@@ -396,7 +396,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         XCTAssertEqual(_timecode?.frameRate, ._24)
         XCTAssertEqual(_direction, .forwards)
         
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0111_0000)) // QF 7
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0111_0000)) // QF 7
         XCTWait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 9).toTimecode(rawValuesAt: ._24)) // unchanged
@@ -405,7 +405,7 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         XCTAssertEqual(_timecode?.frameRate, ._24)
         XCTAssertEqual(_direction, .forwards)
         
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0000_1010)) // QF 0
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0000_1010)) // QF 0
         XCTWait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(_timecode, TCC(h: 2, m: 3, s: 4, f: 10).toTimecode(rawValuesAt: ._24)) // new TC
@@ -416,24 +416,24 @@ final class MTC_Receiver_Receiver_Tests: XCTestCase {
         
         // reverse
         
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0111_0000)) // QF 7
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0111_0000)) // QF 7
         XCTWait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(_direction, .backwards)
         
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0000_1010)) // QF 0
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0000_1010)) // QF 0
         XCTWait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(_direction, .forwards)
         
         // non-sequential (jumps)
         
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0011_0000)) // QF 3
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0011_0000)) // QF 3
         XCTWait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(_direction, .ambiguous) 
         
-        mtcRec.midiIn(event: .timecodeQuarterFrame(byte: 0b0101_0000)) // QF 5
+        mtcRec.midiIn(event: .timecodeQuarterFrame(dataByte: 0b0101_0000)) // QF 5
         XCTWait(sec: 0.005) // approx 1/2 the time between QFs @ 24fps, to allow for test compute cycles
         
         XCTAssertEqual(_direction, .ambiguous)

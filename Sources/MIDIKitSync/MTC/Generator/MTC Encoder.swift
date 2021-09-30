@@ -259,7 +259,7 @@ extension MIDI.MTC {
                 mtcQuarterFrames: mtcQuarterFrame
             )
             
-            let midiEvent = MIDI.Event.sysExUniversal(
+            let midiEvent = MIDI.Event.universalSysEx(
                 universalType: .realTime,
                 deviceID: 0x7F,
                 subID1: 0x01,
@@ -324,7 +324,7 @@ extension MIDI.MTC {
                 break // will never happen
             }
             
-            let midiEvent = MIDI.Event.timecodeQuarterFrame(byte: dataByte)
+            let midiEvent = MIDI.Event.timecodeQuarterFrame(dataByte: dataByte.toMIDIUInt7)
             
             return midiEvent
             
