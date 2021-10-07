@@ -754,47 +754,47 @@ final class MTC_Generator_Encoder_Tests: XCTestCase {
         mtcEnc.increment() // doesn't increment; sends first quarter-frame
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
         XCTAssertEqual(mtcEnc.mtcComponents, TCC(h: 2, m: 03, s: 04, f: 06))
-        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(byte: 0b0000_0110)]) // QF 0
+        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(dataByte: 0b0000_0110)]) // QF 0
         
         mtcEnc.increment() // now it increments to QF 1
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 1)
         XCTAssertEqual(mtcEnc.mtcComponents, TCC(h: 2, m: 03, s: 04, f: 06))
-        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(byte: 0b0001_0000)]) // QF 1
+        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(dataByte: 0b0001_0000)]) // QF 1
         
         mtcEnc.increment()
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 2)
         XCTAssertEqual(mtcEnc.mtcComponents, TCC(h: 2, m: 03, s: 04, f: 06))
-        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(byte: 0b0010_0100)]) // QF 2
+        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(dataByte: 0b0010_0100)]) // QF 2
         
         mtcEnc.increment()
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 3)
         XCTAssertEqual(mtcEnc.mtcComponents, TCC(h: 2, m: 03, s: 04, f: 06))
-        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(byte: 0b0011_0000)]) // QF 3
+        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(dataByte: 0b0011_0000)]) // QF 3
         
         mtcEnc.increment()
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 4)
         XCTAssertEqual(mtcEnc.mtcComponents, TCC(h: 2, m: 03, s: 04, f: 06))
-        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(byte: 0b0100_0011)]) // QF 4
+        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(dataByte: 0b0100_0011)]) // QF 4
         
         mtcEnc.increment()
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 5)
         XCTAssertEqual(mtcEnc.mtcComponents, TCC(h: 2, m: 03, s: 04, f: 06))
-        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(byte: 0b0101_0000)]) // QF 5
+        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(dataByte: 0b0101_0000)]) // QF 5
         
         mtcEnc.increment()
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 6)
         XCTAssertEqual(mtcEnc.mtcComponents, TCC(h: 2, m: 03, s: 04, f: 06))
-        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(byte: 0b0110_0010)]) // QF 6
+        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(dataByte: 0b0110_0010)]) // QF 6
         
         mtcEnc.increment()
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 7)
         XCTAssertEqual(mtcEnc.mtcComponents, TCC(h: 2, m: 03, s: 04, f: 06))
-        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(byte: 0b0111_0000)]) // QF 7
+        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(dataByte: 0b0111_0000)]) // QF 7
         
         mtcEnc.increment()
         XCTAssertEqual(mtcEnc.mtcQuarterFrame, 0)
         XCTAssertEqual(mtcEnc.mtcComponents, TCC(h: 2, m: 03, s: 04, f: 08))
-        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(byte: 0b0000_1000)]) // QF 0
+        XCTAssertEqual(_midiEvents, [.timecodeQuarterFrame(dataByte: 0b0000_1000)]) // QF 0
         
     }
     

@@ -177,20 +177,15 @@ extension MIDI.MTC.Decoder: ReceivesMIDIEvents {
     public func midiIn(event: MIDI.Event) {
         
         switch event {
-        case .sysExUniversal(universalType: let universalType,
-                             deviceID: let deviceID,
-                             subID1: let subID1,
-                             subID2: let subID2,
-                             data: let data,
-                             group: _):
-            processSysEx(universalType: universalType,
-                         deviceID: deviceID,
-                         subID1: subID1,
-                         subID2: subID2,
-                         data: data)
+        case .universalSysEx(let payload):
+            processSysEx(universalType: payload.universalType,
+                         deviceID: payload.deviceID,
+                         subID1: payload.subID1,
+                         subID2: payload.subID2,
+                         data: payload.data)
             
-        case .timecodeQuarterFrame(byte: let dataByte, group: _):
-            processQF(dataByte: dataByte)
+        case .timecodeQuarterFrame(let payload):
+            processQF(dataByte: payload.dataByte.uInt8Value)
             
         default:
             break
@@ -210,7 +205,7 @@ extension MIDI.MTC.Decoder: ReceivesMIDIEvents {
     /// rr == 10: 29.97d frames/s (SMPTE drop-frame timecode)
     /// rr == 11: 30 frames/s
     @inline(__always)
-    internal func processSysEx(universalType: MIDI.Event.SysEx.UniversalType,
+    internal func processSysEx(universalType: MIDI.Event.UniversalSysExType,
                                deviceID: MIDI.UInt7,
                                subID1: MIDI.UInt7,
                                subID2: MIDI.UInt7,

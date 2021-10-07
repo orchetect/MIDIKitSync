@@ -223,7 +223,7 @@ struct MTCGenContentView: View {
                         .managedOutputs[midiSources.MTCGen.tag]?
                         .send(events: midiEvents)
                     
-                    // NOTE: normally you would not want to run any UI updates from this handler; this is only being done here for sake of demonstration purposes
+                    // NOTE: normally you should not run any UI updates from this handler; this is only being done here for sake of demonstration purposes
                     
                     DispatchQueue.main.async {
                         let tc = mtcGen.timecode
