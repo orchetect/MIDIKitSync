@@ -28,7 +28,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // log setup
         Log.setup(enabled: true,
                   defaultLog: nil,
-                  defaultSubsystem: Globals.bundle.bundleID,
+                  defaultSubsystem: Globals.MainBundle.bundleID,
                   useEmoji: .all)
         
         // audio engine setup
