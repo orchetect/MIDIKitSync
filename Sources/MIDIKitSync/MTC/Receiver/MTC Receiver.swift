@@ -23,7 +23,7 @@ extension MIDI.MTC {
         
         public private(set) var name: String
         
-        @MIDI.AtomicAccess
+        @MIDI.Atomic
         public private(set) var state: State = .idle {
             didSet {
                 if state != oldValue {
@@ -36,7 +36,7 @@ extension MIDI.MTC {
         }
         
         /// Property updated whenever incoming MTC timecode changes.
-        @MIDI.AtomicAccess
+        @MIDI.Atomic
         public private(set) var timecode: Timecode
         
         /// The frame rate the local system is using.
@@ -87,7 +87,7 @@ extension MIDI.MTC {
         }
         
         /// Behavior governing how locking occurs prior to chase
-        @MIDI.AtomicAccess
+        @MIDI.Atomic
         public var syncPolicy: SyncPolicy = SyncPolicy()
         
         

@@ -31,11 +31,11 @@ extension MIDI.MTC {
             
         }
         
-        @MIDI.AtomicAccess
+        @MIDI.Atomic
         public private(set) var state: State = .idle
         
         /// Internal var
-        @MIDI.AtomicAccess
+        @MIDI.Atomic
         private var shouldStart = true
         
         /// Property updated whenever outgoing MTC timecode changes.
@@ -66,7 +66,7 @@ extension MIDI.MTC {
         /// Behavior determining when MTC Full-Frame MIDI messages should be generated.
         ///
         /// `.ifDifferent` is recommended and suitable for most implementations.
-        @MIDI.AtomicAccess
+        @MIDI.Atomic
         public var locateBehavior: MIDI.MTC.Encoder.FullFrameBehavior = .ifDifferent
         
         
