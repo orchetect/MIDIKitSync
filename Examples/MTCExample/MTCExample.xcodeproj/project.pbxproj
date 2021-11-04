@@ -404,7 +404,7 @@
 			repositoryURL = "https://github.com/AudioKit/DunneAudioKit.git";
 			requirement = {
 				kind = exactVersion;
-				version = 5.2.0;
+				version = 5.2.2;
 			};
 		};
 		E2E635B725EE4CE10039B8CF /* XCRemoteSwiftPackageReference "OTCore" */ = {
