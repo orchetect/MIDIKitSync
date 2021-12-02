@@ -25,12 +25,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(_: Notification) {
         
-        // log setup
-        Log.setup(enabled: true,
-                  defaultLog: nil,
-                  defaultSubsystem: Globals.MainBundle.bundleID,
-                  useEmoji: .all)
-        
         // audio engine setup
         setupAudioEngine()
         

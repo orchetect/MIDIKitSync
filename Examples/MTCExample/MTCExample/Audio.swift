@@ -56,7 +56,7 @@ func setupAudioEngine() {
     _ = Settings()
     
     if (try? globalAudioEngine.start()) == nil {
-        Log.error("Audio engine could not be started.")
+        logger.error("Audio engine could not be started.")
     }
     
 }
