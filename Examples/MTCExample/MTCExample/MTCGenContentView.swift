@@ -72,7 +72,7 @@ struct MTCGenContentView: View {
                         // update generator frame rate by triggering a locate
                         locate()
                     }
-                    Log.debug("Starting at \(generatorTC.stringValue)")
+                    logger.debug("Starting at \(generatorTC.stringValue)")
                     mtcGen.start(now: generatorTC)
                 }
                 .disabled(mtcGenState)
@@ -212,7 +212,7 @@ struct MTCGenContentView: View {
                     tag: midiSources.MTCGen.tag,
                     uniqueID: .userDefaultsManaged(key: udKey))
             } catch {
-                Log.error(error)
+                logger.error(error)
             }
             
             // set up new MTC receiver and configure it

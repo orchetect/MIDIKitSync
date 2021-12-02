@@ -34,7 +34,7 @@ struct MTCRecContentView: View {
     @State var receiverState: MIDI.MTC.Receiver.State = .idle {
         // Note: be aware didSet will trigger here on a @State var when the variable is imperatively set in code, but not when altered by a $receiverState binding in SwiftUI
         didSet {
-            Log.default("MTC Receiver state:", receiverState)
+            logger.default("MTC Receiver state:", receiverState)
         }
     }
     
@@ -192,7 +192,7 @@ struct MTCRecContentView: View {
                             flags: [],
                             group: nil)
                     ) {
-                        Log.default(">>> LOCAL SYNC: PLAYBACK START @", timecode)
+                        logger.default(">>> LOCAL SYNC: PLAYBACK START @", timecode)
                         scheduledLock?.cancel()
                         scheduledLock = nil
                     }
@@ -223,7 +223,7 @@ struct MTCRecContentView: View {
                     })
                 )
             } catch {
-                Log.error(error)
+                logger.error(error)
             }
             
         }
@@ -232,8 +232,8 @@ struct MTCRecContentView: View {
             Text({
                 // this is a stupid SwiftUI workaround because we can't use .onChange{} in Catalina and didSet{} is not reliable on a @State var, so works fine for our purposes
                 if mtcRec.localFrameRate != localFrameRate {
-                    Log.default("Setting MTC receiver's local frame rate to",
-                                localFrameRate?.stringValue ?? "None")
+                    logger.default("Setting MTC receiver's local frame rate to",
+                                   localFrameRate?.stringValue ?? "None")
                     mtcRec.localFrameRate = localFrameRate
                 }
                 

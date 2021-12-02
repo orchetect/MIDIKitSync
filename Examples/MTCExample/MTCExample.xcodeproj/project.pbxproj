@@ -15,6 +15,7 @@
 		E2B82F4E26B7F2A3006AF638 /* SwiftRadix in Frameworks */ = {isa = PBXBuildFile; productRef = E2B82F4D26B7F2A3006AF638 /* SwiftRadix */; };
 		E2BE847F268BC6680034F62C /* MIDIKitSync Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2BE847E268BC6680034F62C /* MIDIKitSync Extensions.swift */; };
 		E2E635B925EE4CE10039B8CF /* OTCore in Frameworks */ = {isa = PBXBuildFile; productRef = E2E635B825EE4CE10039B8CF /* OTCore */; };
+		E2F71ED42758ED1E006254C0 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F71ED32758ED1E006254C0 /* Log.swift */; };
 		E2FAC4DE257884E000A6DD31 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2FAC4DD257884E000A6DD31 /* AppDelegate.swift */; };
 		E2FAC4E5257884E100A6DD31 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2FAC4E4257884E100A6DD31 /* Preview Assets.xcassets */; };
 		E2FAC4E8257884E100A6DD31 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E2FAC4E6257884E100A6DD31 /* Main.storyboard */; };
@@ -27,6 +28,7 @@
 		E27E3F9F25A6E5C700F4B78E /* Audio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio.swift; sourceTree = "<group>"; };
 		E29EF027267BF2DE00282F94 /* MIDIKit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MIDIKit; path = ../..; sourceTree = "<group>"; };
 		E2BE847E268BC6680034F62C /* MIDIKitSync Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MIDIKitSync Extensions.swift"; sourceTree = "<group>"; };
+		E2F71ED32758ED1E006254C0 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		E2FAC4DA257884E000A6DD31 /* MTCExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MTCExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2FAC4DD257884E000A6DD31 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E2FAC4E4257884E100A6DD31 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -85,6 +87,7 @@
 				E2FAC51D2578856F00A6DD31 /* MIDI Endpoints.swift */,
 				E2BE847E268BC6680034F62C /* MIDIKitSync Extensions.swift */,
 				E27E3F9F25A6E5C700F4B78E /* Audio.swift */,
+				E2F71ED32758ED1E006254C0 /* Log.swift */,
 				E2FAC4E6257884E100A6DD31 /* Main.storyboard */,
 				E2FAC4E9257884E100A6DD31 /* Info.plist */,
 				E2FAC4EA257884E100A6DD31 /* MTCExample.entitlements */,
@@ -182,6 +185,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2BE847F268BC6680034F62C /* MIDIKitSync Extensions.swift in Sources */,
+				E2F71ED42758ED1E006254C0 /* Log.swift in Sources */,
 				E275EAB42679A493008E396D /* MTCGenContentView.swift in Sources */,
 				E27E3FA025A6E5C700F4B78E /* Audio.swift in Sources */,
 				E275EAB02679A444008E396D /* MTCRecContentView.swift in Sources */,
@@ -412,7 +416,7 @@
 			repositoryURL = "https://github.com/orchetect/OTCore.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.14;
+				minimumVersion = 1.1.24;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
