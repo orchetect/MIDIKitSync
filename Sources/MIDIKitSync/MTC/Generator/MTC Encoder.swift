@@ -259,7 +259,7 @@ extension MIDI.MTC {
                 mtcQuarterFrames: mtcQuarterFrame
             )
             
-            let midiEvent = MIDI.Event.universalSysEx(
+            let midiEvent = MIDI.Event.universalSysEx7(
                 universalType: .realTime,
                 deviceID: 0x7F,
                 subID1: 0x01,
