@@ -1,6 +1,6 @@
 # 🔌 Sync Extension for [MIDIKit](https://github.com/orchetect/MIDIKit)
 
-[![CI Build Status](https://github.com/orchetect/MIDIKitSync/actions/workflows/build.yml/badge.svg)](https://github.com/orchetect/MIDIKitSync/actions/workflows/build.yml) [![Platforms - macOS 10.12+ | iOS 10+ | tvOS (beta) | watchOS (beta)](https://img.shields.io/badge/platforms-macOS%2010.12%2B%20|%20iOS%2010%2B%20|%20tvOS%20(beta)%20|%20watchOS%20(beta)-lightgrey.svg?style=flat)](https://developer.apple.com/swift) [![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/orchetect/MIDIKitSync/blob/main/LICENSE)
+[![CI Build Status](https://github.com/orchetect/MIDIKitSync/actions/workflows/build.yml/badge.svg)](https://github.com/orchetect/MIDIKitSync/actions/workflows/build.yml) [![Platforms - macOS 10.12+ | iOS 10+](https://img.shields.io/badge/platforms-macOS%2010.12%2B%20|%20iOS%2010%2B-lightgrey.svg?style=flat)](https://developer.apple.com/swift) [![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/orchetect/MIDIKitSync/blob/main/LICENSE)
 
 This extension adds abstractions for MIDI sync protocols, such as MTC (MIDI Timecode).
 

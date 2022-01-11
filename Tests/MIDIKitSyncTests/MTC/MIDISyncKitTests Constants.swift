@@ -89,7 +89,7 @@ enum kMIDIEvent {
             let ss: MIDI.Byte = 0
             let ff: MIDI.Byte = 0
             
-            let msg = MIDI.Event.universalSysEx(
+            let msg = MIDI.Event.universalSysEx7(
                 universalType: .realTime,
                 deviceID: 0x7F,
                 subID1: 0x01,
@@ -106,7 +106,7 @@ enum kMIDIEvent {
             let ss: MIDI.Byte = 3
             let ff: MIDI.Byte = 4
             
-            let msg = MIDI.Event.universalSysEx(
+            let msg = MIDI.Event.universalSysEx7(
                 universalType: .realTime,
                 deviceID: 0x7F,
                 subID1: 0x01,
@@ -123,7 +123,7 @@ enum kMIDIEvent {
             let ss: MIDI.Byte = 17
             let ff: MIDI.Byte = 20
             
-            let msg = MIDI.Event.universalSysEx(
+            let msg = MIDI.Event.universalSysEx7(
                 universalType: .realTime,
                 deviceID: 0x7F,
                 subID1: 0x01,

@@ -177,7 +177,7 @@ extension MIDI.MTC.Decoder: ReceivesMIDIEvents {
     public func midiIn(event: MIDI.Event) {
         
         switch event {
-        case .universalSysEx(let payload):
+        case .universalSysEx7(let payload):
             processSysEx(universalType: payload.universalType,
                          deviceID: payload.deviceID,
                          subID1: payload.subID1,
