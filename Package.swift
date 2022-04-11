@@ -19,7 +19,7 @@ let package = Package(
     ],
 
     dependencies: [
-        .package(url: "https://github.com/orchetect/MIDIKit", from: "0.3.0"),
+        .package(url: "https://github.com/orchetect/MIDIKit", from: "0.4.4"),
         .package(url: "https://github.com/orchetect/TimecodeKit", from: "1.2.9")
     ],
 
