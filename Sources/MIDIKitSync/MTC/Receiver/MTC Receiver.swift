@@ -102,7 +102,7 @@ extension MIDI.MTC {
                                              _ displayNeedsUpdate: Bool) -> Void)? = nil
         
         /// Called when the MTC receiver's state changes
-        internal var stateChangedHandler: ((_ state: State) -> Void)? = nil
+        public var stateChangedHandler: ((_ state: State) -> Void)? = nil
         
         
         // MARK: - Init
