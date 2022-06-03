@@ -7,8 +7,9 @@ assignees: ''
 
 ---
 
-Please review the MIDIKit Wiki prior to submitting issues:
+Please review the MIDIKit Wiki and MIDIKitSync Wiki prior to submitting issues:
 https://github.com/orchetect/MIDIKit/wiki
+https://github.com/orchetect/MIDIKitSync/wiki
 
 
 **Describe the Bug**
