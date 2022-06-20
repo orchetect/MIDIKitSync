@@ -20,7 +20,10 @@ let package = Package(
 
     dependencies: [
         .package(url: "https://github.com/orchetect/MIDIKit", from: "0.4.4"),
-        .package(url: "https://github.com/orchetect/TimecodeKit", from: "1.2.9")
+        .package(url: "https://github.com/orchetect/TimecodeKit", from: "1.2.9"),
+        
+        // testing-only:
+        .package(url: "https://github.com/orchetect/XCTestUtils", from: "1.0.1")
     ],
 
     targets: [
@@ -36,7 +39,8 @@ let package = Package(
             name: "MIDIKitSyncTests",
             dependencies: [
                 .target(name: "MIDIKitSync"),
-                .product(name: "TimecodeKit", package: "TimecodeKit")
+                .product(name: "TimecodeKit", package: "TimecodeKit"),
+                .product(name: "XCTestUtils", package: "XCTestUtils")
             ]
         )
     ]
