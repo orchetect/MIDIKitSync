@@ -29,9 +29,9 @@ jobs:
     steps:
     - uses: actions/checkout@main
     - name: Build
-      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "platform=macOS,arch=x86_64"
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "generic/platform=macOS,name=Any Mac"
     - name: Unit Tests
-      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "platform=macOS,arch=x86_64"
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "platform=macOS"
   
   macOS-10_15:
     name: macOS 10.15 Catalina
@@ -39,9 +39,9 @@ jobs:
     steps:
     - uses: actions/checkout@main
     - name: Build
-      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "platform=macOS,arch=x86_64"
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "generic/platform=macOS,name=Any Mac"
     - name: Unit Tests
-      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "platform=macOS,arch=x86_64"
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "platform=macOS"
       
   macCatalyst:
     name: macCatalyst
@@ -49,9 +49,9 @@ jobs:
     steps:
     - uses: actions/checkout@main
     - name: Build
-      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "platform=macOS,variant=Mac Catalyst,arch=x86_64"
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "generic/platform=macOS,variant=Mac Catalyst,name=Any Mac"
     - name: Unit Tests
-      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "platform=macOS,variant=Mac Catalyst,arch=x86_64"
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "platform=macOS,variant=Mac Catalyst"
   
   iOS:
     name: iOS
@@ -71,7 +71,7 @@ jobs:
     - name: MTCExample - Resolve Package Dependencies # needed because sometimes xcodebuild fails otherwise
       run: xcodebuild build -project "Examples/MTCExample/MTCExample.xcodeproj" -resolvePackageDependencies
     - name: MTCExample - Build
-      run: xcodebuild build -project "Examples/MTCExample/MTCExample.xcodeproj" -scheme "MTCExample"
+      run: xcodebuild build -project "Examples/MTCExample/MTCExample.xcodeproj" -scheme "MTCExample" -destination "generic/platform=macOS,name=Any Mac"
 
 # we flew too close to the sun... tvOS is not yet ready for primetime because CoreMIDI is still in beta for tvOS
 #
