@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E22FE29827975BD80037BFC5 /* AudioKit in Frameworks */ = {isa = PBXBuildFile; productRef = E22FE29727975BD80037BFC5 /* AudioKit */; };
 		E2639D0726B145EE00AD0607 /* MIDIKitSync in Frameworks */ = {isa = PBXBuildFile; productRef = E2639D0626B145EE00AD0607 /* MIDIKitSync */; };
 		E275EAB02679A444008E396D /* MTCRecContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E275EAAF2679A444008E396D /* MTCRecContentView.swift */; };
 		E275EAB42679A493008E396D /* MTCGenContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E275EAB32679A493008E396D /* MTCGenContentView.swift */; };
@@ -16,7 +15,6 @@
 		E2B82F4E26B7F2A3006AF638 /* SwiftRadix in Frameworks */ = {isa = PBXBuildFile; productRef = E2B82F4D26B7F2A3006AF638 /* SwiftRadix */; };
 		E2BE847F268BC6680034F62C /* MIDIKitSync Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2BE847E268BC6680034F62C /* MIDIKitSync Extensions.swift */; };
 		E2E635B925EE4CE10039B8CF /* OTCore in Frameworks */ = {isa = PBXBuildFile; productRef = E2E635B825EE4CE10039B8CF /* OTCore */; };
-		E2EF41F027975CE7000714F3 /* AudioKitEX in Frameworks */ = {isa = PBXBuildFile; productRef = E2EF41EF27975CE7000714F3 /* AudioKitEX */; };
 		E2F71ED42758ED1E006254C0 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F71ED32758ED1E006254C0 /* Log.swift */; };
 		E2FAC4DE257884E000A6DD31 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2FAC4DD257884E000A6DD31 /* AppDelegate.swift */; };
 		E2FAC4E5257884E100A6DD31 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2FAC4E4257884E100A6DD31 /* Preview Assets.xcassets */; };
@@ -47,8 +45,6 @@
 			files = (
 				E2639D0726B145EE00AD0607 /* MIDIKitSync in Frameworks */,
 				E29EF039267BF71B00282F94 /* DunneAudioKit in Frameworks */,
-				E22FE29827975BD80037BFC5 /* AudioKit in Frameworks */,
-				E2EF41F027975CE7000714F3 /* AudioKitEX in Frameworks */,
 				E2E635B925EE4CE10039B8CF /* OTCore in Frameworks */,
 				E2B82F4E26B7F2A3006AF638 /* SwiftRadix in Frameworks */,
 			);
@@ -129,8 +125,6 @@
 				E29EF038267BF71B00282F94 /* DunneAudioKit */,
 				E2639D0626B145EE00AD0607 /* MIDIKitSync */,
 				E2B82F4D26B7F2A3006AF638 /* SwiftRadix */,
-				E22FE29727975BD80037BFC5 /* AudioKit */,
-				E2EF41EF27975CE7000714F3 /* AudioKitEX */,
 			);
 			productName = MTCExample;
 			productReference = E2FAC4DA257884E000A6DD31 /* MTCExample.app */;
@@ -163,8 +157,6 @@
 				E2E635B725EE4CE10039B8CF /* XCRemoteSwiftPackageReference "OTCore" */,
 				E29EF02D267BF47F00282F94 /* XCRemoteSwiftPackageReference "SwiftRadix" */,
 				E29EF037267BF71B00282F94 /* XCRemoteSwiftPackageReference "DunneAudioKit" */,
-				E22FE29627975BD80037BFC5 /* XCRemoteSwiftPackageReference "AudioKit" */,
-				E2EF41EE27975CE7000714F3 /* XCRemoteSwiftPackageReference "AudioKitEX" */,
 			);
 			productRefGroup = E2FAC4DB257884E000A6DD31 /* Products */;
 			projectDirPath = "";
@@ -403,14 +395,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E22FE29627975BD80037BFC5 /* XCRemoteSwiftPackageReference "AudioKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/AudioKit/AudioKit.git";
-			requirement = {
-				kind = exactVersion;
-				version = 5.3.0;
-			};
-		};
 		E29EF02D267BF47F00282F94 /* XCRemoteSwiftPackageReference "SwiftRadix" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/orchetect/SwiftRadix.git";
@@ -423,8 +407,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/AudioKit/DunneAudioKit.git";
 			requirement = {
-				kind = exactVersion;
-				version = 5.3.0;
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.4.0;
 			};
 		};
 		E2E635B725EE4CE10039B8CF /* XCRemoteSwiftPackageReference "OTCore" */ = {
@@ -435,22 +419,9 @@
 				minimumVersion = 1.1.29;
 			};
 		};
-		E2EF41EE27975CE7000714F3 /* XCRemoteSwiftPackageReference "AudioKitEX" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/AudioKit/AudioKitEX";
-			requirement = {
-				kind = exactVersion;
-				version = 5.3.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E22FE29727975BD80037BFC5 /* AudioKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E22FE29627975BD80037BFC5 /* XCRemoteSwiftPackageReference "AudioKit" */;
-			productName = AudioKit;
-		};
 		E2639D0626B145EE00AD0607 /* MIDIKitSync */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MIDIKitSync;
@@ -469,11 +440,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E2E635B725EE4CE10039B8CF /* XCRemoteSwiftPackageReference "OTCore" */;
 			productName = OTCore;
-		};
-		E2EF41EF27975CE7000714F3 /* AudioKitEX */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E2EF41EE27975CE7000714F3 /* XCRemoteSwiftPackageReference "AudioKitEX" */;
-			productName = AudioKitEX;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
