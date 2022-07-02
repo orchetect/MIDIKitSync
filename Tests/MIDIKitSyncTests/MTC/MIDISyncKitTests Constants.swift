@@ -3,7 +3,7 @@
 //  MIDIKitSync • https://github.com/orchetect/MIDIKitSync
 //
 
-#if !os(watchOS)
+#if shouldTestCurrentPlatform
 
 @testable import MIDIKitSync
 import Foundation

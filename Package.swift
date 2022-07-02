@@ -7,7 +7,7 @@ let package = Package(
     name: "MIDIKitSync",
 
     platforms: [
-        .macOS(.v10_12), .iOS(.v10)
+        .macOS(.v10_12), .iOS(.v10), .tvOS(.v10), .watchOS(.v3)
     ],
 
     products: [
@@ -46,3 +46,26 @@ let package = Package(
     ]
     
 )
+
+func addShouldTestFlag() {
+    // swiftSettings may be nil so we can't directly append to it
+    
+    var swiftSettings = package.targets
+        .first(where: { $0.name == "MIDIKitTests" })?
+        .swiftSettings ?? []
+    
+    swiftSettings.append(.define("shouldTestCurrentPlatform"))
+    
+    package.targets
+        .first(where: { $0.name == "MIDIKitTests" })?
+        .swiftSettings = swiftSettings
+}
+
+// Swift version in Xcode 12.5.1 which introduced watchOS testing
+#if os(watchOS) && swift(>=5.4.2)
+addShouldTestFlag()
+#elseif os(watchOS)
+// don't add flag
+#else
+addShouldTestFlag()
+#endif
