@@ -62,7 +62,27 @@ jobs:
       run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "platform=iOS Simulator,name=iPhone 12"
     - name: iPhone 12 Simulator - Unit Tests
       run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "platform=iOS Simulator,name=iPhone 12"
-  
+
+  tvOS:
+    name: tvOS
+    runs-on: macos-latest # this must be macos, GitHub does not offer tvOS directly but we can use xcodebuild
+    steps:
+    - uses: actions/checkout@main
+    - name: Apple TV - Build
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "generic/platform=tvOS Simulator,name=Any tvOS Simulator Device"
+    - name: Apple TV - Unit Tests
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "platform=tvOS Simulator,name=Apple TV 4K (2nd generation)"
+      
+  watchOS:
+    name: watchOS
+    runs-on: macos-latest # this must be macos, GitHub does not offer watchOS directly but we can use xcodebuild
+    steps:
+    - uses: actions/checkout@main
+    - name: Apple Watch - Build
+      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "generic/platform=watchOS Simulator,name=Any watchOS Simulator Device"
+    - name: Apple Watch - Unit Tests
+      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "platform=watchOS Simulator,name=Apple Watch Series 7 - 45mm"
+
   Examples:
     name: Examples
     runs-on: macos-latest
@@ -72,19 +92,6 @@ jobs:
       run: xcodebuild build -project "Examples/MTCExample/MTCExample.xcodeproj" -resolvePackageDependencies
     - name: MTCExample - Build
       run: xcodebuild build -project "Examples/MTCExample/MTCExample.xcodeproj" -scheme "MTCExample" -destination "generic/platform=macOS,name=Any Mac"
-
-# we flew too close to the sun... tvOS is not yet ready for primetime because CoreMIDI is still in beta for tvOS
-#
-#  tvOS:
-#    name: tvOS
-#    runs-on: macos-latest # this must be macos, GitHub does not offer tvOS directly but we can use xcodebuild
-#    steps:
-#    - uses: actions/checkout@main
-#    - name: Apple TV - Build
-#      run: xcodebuild build -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "platform=tvOS Simulator,name=Apple TV"
-#    - name: Apple TV - Unit Tests
-#      run: xcodebuild test -workspace ".swiftpm/xcode/package.xcworkspace" -scheme "MIDIKitSync-CI" -destination "platform=tvOS Simulator,name=Apple TV"
-
 
 # xcodebuild test reference:
 # https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/testing_with_xcode/chapters/08-automation.html
