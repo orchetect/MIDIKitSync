@@ -51,13 +51,13 @@ func addShouldTestFlag() {
     // swiftSettings may be nil so we can't directly append to it
     
     var swiftSettings = package.targets
-        .first(where: { $0.name == "MIDIKitTests" })?
+        .first(where: { $0.name == "MIDIKitSyncTests" })?
         .swiftSettings ?? []
     
     swiftSettings.append(.define("shouldTestCurrentPlatform"))
     
     package.targets
-        .first(where: { $0.name == "MIDIKitTests" })?
+        .first(where: { $0.name == "MIDIKitSyncTests" })?
         .swiftSettings = swiftSettings
 }
 
